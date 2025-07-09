@@ -72,20 +72,27 @@ In the project directory, you can run:
 
 The project uses the Next.js App Router, with the following structure:
 
+
 ```
 /src
-├── /app
-│   ├── /api                # API routes (e.g., for Shopify order fetching)
-│   ├── /components         # Reusable UI components
-│   ├── /lib                # Helper functions and Shopify client
-│   ├── /styles             # Global styles and Tailwind CSS configuration
+├── /app/                      # <-- Routing logic
+│   ├── /api
+│   ├── /cart
 │   ├── /products/[slug]    # Dynamic product page route
-│   ├── page.jsx            # Homepage
-│   └── layout.jsx          # Root layout
-├── .env.local              # Environment variables
-├── next.config.js          # Next.js configuration
-└── tailwind.config.js      # Tailwind CSS configuration
+│   └── /... (other routes)
+│
+├── /components/               # <-- Reusable components
+│   ├── /cart
+│   ├── /layout
+│   └── /product
+│
+├── /lib/                      # <-- Core logic, utils, etc.
+│   ├── /shopify
+│   └── /constants.ts
+│
+└── /styles/                   # <-- Global styles
 ```
+
 
 ## Deployment
 
