@@ -13,7 +13,27 @@ type NavLink = {
 const NavLinks = ({ links }: { links: NavLink[] }) => {
   const pathname = usePathname();
   const [activeLink, setActiveLink] = useState('');
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
   const isInitialLoad = useRef(true);
+  const linkRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Update indicator position when active link changes
+  useEffect(() => {
+    if (activeLink && linkRefs.current[activeLink] && containerRef.current) {
+      const activeElement = linkRefs.current[activeLink];
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const activeRect = activeElement.getBoundingClientRect();
+      
+      setIndicatorStyle({
+        left: activeRect.left - containerRect.left,
+        width: activeRect.width,
+        opacity: 1,
+      });
+    } else {
+      setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+    }
+  }, [activeLink]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,17 +90,28 @@ const NavLinks = ({ links }: { links: NavLink[] }) => {
   };
 
   return (
-    <div className="flex items-center gap-x-5">
+    <div ref={containerRef} className="relative flex items-center gap-x-5">
+      {/* Animated underline indicator */}
+      <div
+        className="absolute bottom-0 h-[1px] bg-black transition-all duration-300 ease-out"
+        style={{
+          left: `${indicatorStyle.left}px`,
+          width: `${indicatorStyle.width}px`,
+          opacity: indicatorStyle.opacity,
+        }}
+      />
+      
       {links.map((link) => (
         <Link
           key={link.name}
+          ref={(el) => {
+            linkRefs.current[link.href] = el;
+          }}
           href={`/${link.href}`} // Navigates to example.com/#shop
           onClick={(e) => handleLinkClick(e, link.href)}
           className={clsx(
             'text-sm font-light text-black-600 transition-colors hover:text-black',
-            {
-              'underline decoration-1 underline-offset-4 decoration-black': activeLink === link.href,
-            }
+            // Removed the individual underline styles since we're using the animated indicator
           )}
         >
           {link.name}
