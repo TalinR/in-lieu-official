@@ -83,11 +83,59 @@ This document outlines the steps to rebuild the In Lieu website using Next.js an
 ## Phase 2: Core Component & Page Development
 
 
-1.  **Layout & Navbar:**
-    - [ ] Create a root layout in `/src/app/layout.tsx` that includes the `Navbar` and a `Footer`.
-    - [ ] Recreate the `Navbar` component in `/src/components/layout/navbar/index.tsx`.
-    - [ ] Implement the slide-out `MobileMenu` component.
-    - [ ] Integrate the Shopify cart using a `CartModal` component.
+1.  **Layout & Navbar (New "Makurro" Floating Design)**
+    - **Objective:** Build a responsive, modern, floating pill-shaped navigation bar based on the reference design. The initial focus will be on the mobile view.
+
+    - [x] **Step 1: Scaffolding & Setup**
+        - [x] Create the new component file structure:
+            ```
+            /src/components/layout/navbar/
+            ├── Navbar.tsx         # Parent container ('use client')
+            ├── NavLinks.tsx       # Navigation links (Server Component)
+            ├── CartButton.tsx     # Cart icon button ('use client')
+            └── MenuButton.tsx     # Menu icon button ('use client')
+            ```
+        - [x] Install any necessary dependencies for icons (e.g., `@heroicons/react`).
+
+    - [x] **Step 2: `NavLinks.tsx` (Server Component)**
+        - [x] Implement as a client Component.
+        - [x] Accept navigation links via props (e.g., `[{ name: 'shop', href: '#shop' }]`).
+        - [x] Render links: "makurro", "lookbook", "about", "shop".
+        - [x] Style with Flexbox (`flex gap-x-5`).
+        - [x] Implement logic/styling for the active link (underlined).
+
+    - [x] **Step 3: `Navbar.tsx` (Parent Client Component)**
+        - [x] Implement as a Client Component (`'use client'`).
+        - [x] Create and manage state: `isCartOpen`, `isMenuOpen`.
+        - [x] Define handler functions: `toggleCart`, `toggleMenu`.
+        - [x] Assemble the layout:
+            - Main "floating pill" container (`bg-white`, `rounded-full`, `shadow-lg`, etc.).
+            - Use Flexbox to position `NavLinks` on the left and buttons on the right.
+            - Add the vertical separator (`<div className="w-px h-6 bg-gray-200">`).
+            - Ensure the navbar is horizontally centered on the page.
+
+    - [x] **Step 4: Button Components (`CartButton.tsx` & `MenuButton.tsx`)**
+        - [x] Implement `CartButton.tsx` as a Client Component.
+        - [x] Pass `toggleCart` function to it as a prop and call it `onClick`.
+        - [x] Style `CartButton` with a background color and specific rounding:
+            - Left side: fully rounded (`rounded-l-full`).
+            - Right side: 8pt radius (`rounded-r-lg`).
+        - [x] Implement `MenuButton.tsx` similarly, passing `toggleMenu` as a prop.
+        - [x] Style `MenuButton` with specific rounding:
+            - Right side: fully rounded (`rounded-r-full`).
+            - Left side: 8pt radius (`rounded-l-lg`).
+        - [x] Ensure styling (background, hover states) is consistent between both buttons.
+
+    - [ ] **Step 5: Cart Data Integration**
+        - [ ] In `CartButton.tsx`, perform the GraphQL query to fetch the number of items in the cart.
+        - [ ] Implement a badge to display the item count.
+        - [ ] The badge should be positioned on the corner of the icon and only visible if the count > 0.
+
+    - [ ] **Step 6: Final Integration**
+        - [ ] Create placeholder modals for the cart and menu.
+        - [ ] Conditionally render these modals in `Navbar.tsx` based on the `isCartOpen` and `isMenuOpen` states.
+        - [ ] Add the final `Navbar` component to the root layout (`/src/app/layout.tsx`).
+
 
 2.  **Cart Management:**
     - [ ] Implement a `CartProvider` using React Context (`/src/components/cart/cart-context.tsx`) to manage the cart state throughout the application.
