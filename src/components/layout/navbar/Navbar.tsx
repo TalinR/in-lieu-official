@@ -1,17 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import NavLinks from './NavLinks';
 import CartButton from './CartButton';
 import MenuButton from './MenuButton';
 
-// Mock data for the navigation links
-const navLinks = [
-  { name: 'makurro', href: '#home' },
-  { name: 'lookbook', href: '#lookbook' },
-  { name: 'about', href: '#about' },
-  { name: 'shop', href: '#shop' },
-];
 
 const Navbar = () => {
   const [isCartOpen, setCartOpen] = useState(false);
@@ -22,13 +14,13 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2">
+      <div className="fixed bottom-4 right-4 z-50">
         <nav className="navbar-bg-glass flex w-full items-center gap-x-3 rounded-full p-2 shadow-lg">
-          <div className="flex-1 pl-4 pr-1">
+          {/* <div className="flex-1 pl-4 pr-1">
             <NavLinks links={navLinks} />
-          </div>
+          </div> */}
 
-          <div className="h-6 w-px bg-gray-300" />
+          {/* <div className="h-6 w-px bg-gray-300" /> */}
 
           <div className="flex items-center gap-x-2">
             <CartButton onClick={toggleCart} />

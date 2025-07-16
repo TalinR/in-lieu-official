@@ -12,18 +12,17 @@ type CartButtonProps = {
 const CartButton = ({ onClick, quantity = 1 }: CartButtonProps) => {
   return (
     // Use a relative container to position the button and the badge
-    <div className="relative h-10 w-13">
+    <div className="relative h-10 w-10">
       <button
         onClick={onClick}
         aria-label="Open cart"
         className={clsx(
-          'absolute inset-0 flex items-center justify-center text-black', // Fill the container
-          'rounded-l-[20px] rounded-r-[8px]',
+          'absolute inset-0 flex items-center justify-center rounded-full text-black', // Fill the container
           'bg-[#FFFFFF17] backdrop-blur-sm',
           'shadow-figma-button',
         )}
       >
-        <ShoppingBagIcon className="h-6 w-6 translate-x-[2px]" />
+        <ShoppingBagIcon className="h-6 w-6" />
       </button>
 
       <div
