@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CartButton from './CartButton';
 import MenuButton from './MenuButton';
+import MenuModal from '../menu/MenuModal';
 
 
 const Navbar = () => {
@@ -10,7 +11,20 @@ const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const toggleCart = () => setCartOpen(!isCartOpen);
-  const toggleMenu = () => setMenuOpen(!isMenuOpen);
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [isMenuOpen]);
 
   return (
     <>
@@ -29,7 +43,6 @@ const Navbar = () => {
         </nav>
       </div>
 
-      {/* Placeholder for Cart Modal */}
       {isCartOpen && (
         <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={toggleCart}>
           <div className="absolute right-0 top-0 h-full w-96 bg-white p-6">
@@ -39,15 +52,7 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* Placeholder for Menu Modal */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={toggleMenu}>
-          <div className="absolute left-0 top-0 h-full w-96 bg-white p-6">
-            <h2 className="text-xl font-bold">Menu</h2>
-            <p>Menu content goes here...</p>
-          </div>
-        </div>
-      )}
+      <MenuModal isOpen={isMenuOpen} />
     </>
   );
 };
