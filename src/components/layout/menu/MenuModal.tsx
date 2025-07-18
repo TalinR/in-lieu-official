@@ -8,6 +8,27 @@ import { usePathname } from 'next/navigation';
 import { useSections } from '../SectionsContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// ------------------  animation definitions  ------------------
+const container = {
+  hidden: {},
+  show: {
+    transition: {           // children fire in sequence
+      staggerChildren: 0.25 // 0.25 s between siblings – tweak as you like
+    }
+  },
+  exit: {
+    opacity: 0,
+    transition: { when: 'afterChildren' } // children leave first
+  }
+};
+
+const item = {               // re-use everywhere
+  hidden: { opacity: 0, y: 30 },
+  show:  { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+  exit:  { opacity: 0, y: 20, transition: { duration: 0.2 } }
+};
+// -------------------------------------------------------------
+
 interface MenuModalProps {
   isOpen: boolean;
   onLinkClick?: () => void;
@@ -66,41 +87,43 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
   }
 
   return (
-    <div id="menu" className="fixed inset-0 z-40 flex flex-col bg-white p-6 pb-16 lg:flex-row">
-      {/* 
-        Image Section 
-        - Mobile: Takes up the remaining space (flex-1)
-        - Desktop: Takes up 3/5 of the width
-      */}
-      <div className="flex-1 lg:w-3/5">
-        <ResponsiveSafeImage
-          src="/images/test_image.png"
-          alt="A beautiful landscape"
-          imageClassName="transition-opacity duration-1000 ease-in-out"
-          // Optional: customize the safe area. 
-          // Defaults to x: 0.3 (30%) and y: 0.5 (50%) if not provided.
-          // safeArea={{ x: 0.4, y: 0.6 }} 
-        />
-      </div>
-      {/* 
-        Content Section
-        - Mobile: Stacks below the image
-        - Desktop: Takes up 2/5 of the width and arranges content vertically
-      */}
-      <div className="flex flex-col lg:w-2/5" >
-        {/* <h1 className="text-2xl font-bold text-center">Menu</h1> */}
+    <AnimatePresence>
+      {isOpen && (                                         
+        <motion.div
+          id="menu"
+          variants={container}   // parent gets the container variant
+          initial="hidden"
+          animate="show"
+          exit="exit"
+          className="fixed inset-0 z-40 flex flex-col bg-white p-6 pb-16 lg:flex-row lg:p-30"
+        >
+          {/*  Image first  */}
+          <motion.div variants={item} className="flex-1 lg:w-3/5">
+            <ResponsiveSafeImage
+              src="/images/test_image.png"
+              alt="A beautiful landscape"
+              imageClassName="transition-opacity"
+            />
+          </motion.div>
 
-        <div className="my-10">
-          <PageLinks pages={pages} currentPath={currentPath} onLinkClick={onLinkClick} />
-        </div>
+          {/*  Everything in the right column gets staggered next  */}
+          <motion.div variants={container} className="flex flex-col lg:w-2/5">
+            {/* first to appear */}
+            <motion.div variants={item} className="my-10">
+              <PageLinks pages={pages} currentPath={currentPath} onLinkClick={onLinkClick} />
+            </motion.div>
 
-        <hr className="border-t border-gray-300 w-full lg:hidden" />
-
-        <div className="my-10">
-          <SocialSelection />
-        </div>
-      </div>
-    </div>
+            {/* second “slot” → both inner elements run in parallel */}
+            <motion.div variants={item}>                    {/* ← one child in the stagger */}
+              <hr className="border-t border-gray-300 w-full lg:hidden"/>
+              <div className="my-10">
+                <SocialSelection />
+              </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
