@@ -10,7 +10,7 @@ interface ResponsiveSafeImageProps {
 const ResponsiveSafeImage = ({
   src,
   alt,
-  safeArea = { x: 0.5, y: 0.8 },
+  safeArea = { x: 0.1, y: 0.4 },
 }: ResponsiveSafeImageProps) => {
   // Refs for the container and the image elements
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,7 +42,7 @@ const ResponsiveSafeImage = ({
     const scaleX = cWidth / safeWidth;
     const scaleY = cHeight / safeHeight;
 
-    // We must use the LARGER scale factor to ensure the safe area is
+    // We must use the SMALLER scale factor to ensure the safe area is
     // fully visible while filling the container.
     const scale = Math.min(scaleX, scaleY);
 
@@ -50,9 +50,20 @@ const ResponsiveSafeImage = ({
     const newImageWidth = iWidth * scale;
     const newImageHeight = iHeight * scale;
 
+
     // Calculate the top/left position to center the scaled image
     const left = (cWidth - newImageWidth) / 2;
-    const top = (cHeight - newImageHeight) / 2;
+    // const top = (cHeight - newImageHeight) / 2;
+    let top: number;
+    
+
+    if ((cHeight - newImageHeight)<0) {
+      top = (cHeight - newImageHeight) / 2
+    }
+    else{
+      top=0
+    }
+
 
     // Set the new style to position and scale the image
     setImageStyle({

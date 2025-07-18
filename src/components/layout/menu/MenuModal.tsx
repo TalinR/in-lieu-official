@@ -1,5 +1,8 @@
 'use client';
+
+import React from 'react';
 import ResponsiveSafeImage from './ResponsiveSafeImage';
+
 
 interface MenuModalProps {
   isOpen: boolean;
@@ -11,17 +14,30 @@ const MenuModal = ({ isOpen }: MenuModalProps) => {
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex h-full w-full flex-col items-center justify-center bg-white p-6">
-      <h2 className="text-2xl font-bold">Menu</h2>
-      <p>Menu content goes here...</p>
-      <div className="w-full h-full border-4 border-blue-500 shadow-lg">
-        <ResponsiveSafeImage
-          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+    <div className="fixed inset-0 z-40 flex flex-col bg-white p-6 pb-30 lg:flex-row">
+      {/* 
+        Image Section 
+        - Mobile: Takes up the remaining space (flex-1)
+        - Desktop: Takes up 3/5 of the width
+      */}
+      <div className="flex-1 lg:w-3/5">
+      <ResponsiveSafeImage
+          src="/images/test_image.png"
           alt="A beautiful landscape"
           // Optional: customize the safe area. 
           // Defaults to x: 0.3 (30%) and y: 0.5 (50%) if not provided.
           // safeArea={{ x: 0.4, y: 0.6 }} 
         />
+      </div>
+      {/* 
+        Content Section
+        - Mobile: Stacks below the image
+        - Desktop: Takes up 2/5 of the width and arranges content vertically
+      */}
+      <div className="flex flex-col lg:w-2/5" >
+        <h1 className="text-2xl font-bold text-center">Menu</h1>
+
+
       </div>
     </div>
   );

@@ -159,6 +159,93 @@ This document outlines the steps to rebuild the In Lieu website using Next.js an
     - [ ] Create an API route (e.g., `/app/api/orders/route.ts`) that uses the Shopify Admin API to fetch recent orders. This route must be protected.
     - [ ] Connect the homepage component to this API route to display the order data.
 
+6.  **Menu Modal**
+    - **Objective:** Build a responsive pop-out menu modal with image, product tags, page navigation, social media icons, and brand logo. The layout adapts from mobile (stacked) to desktop (side-by-side).
+
+    - [ ] **Step 1: MenuImage.tsx Component**
+        - [ ] Create `/src/components/layout/menu/MenuImage.tsx` as a client component.
+        - [ ] Integrate the existing `ResponsiveSafeImage.tsx` component for image display.
+        - [ ] Accept props: `imageSrc`, `imageAlt`, and `productTags` array.
+        - [ ] Implement container with relative positioning to support absolute-positioned product tags.
+        - [ ] Mobile styling: Use `flex-1` to fill remaining vertical space in flex column layout.
+        - [ ] Desktop styling: Use `lg:w-1/2` or `lg:w-3/5` for fixed width, `h-screen` for full height.
+        - [ ] Render `ProductTag` components with absolute positioning based on tag coordinates.
+
+    - [ ] **Step 2: ProductTag.tsx Component**
+        - [ ] Create `/src/components/layout/menu/ProductTag.tsx` as a client component.
+        - [ ] Accept props: `productName`, `productHandle`, `position` (x, y coordinates), `onClick` handler.
+        - [ ] Implement clickable tag with clean styling (pill-shaped, subtle background).
+        - [ ] Position absolutely within the image container using `position.x` and `position.y`.
+        - [ ] Add hover states and smooth transitions.
+        - [ ] Handle click events to navigate to product pages (`/product/[handle]`).
+        - [ ] Ensure tags are responsive and scale appropriately on different screen sizes.
+
+    - [ ] **Step 3: PageLinks.tsx Component**
+        - [ ] Create `/src/components/layout/menu/PageLinks.tsx` as a server component.
+        - [ ] Accept props: `pages` array with `{ name: string, href: string }` structure.
+        - [ ] Render navigation links for main site pages ("collection", "delivery and returns").
+        - [ ] Styling: Block-level elements with clean typography (`text-lg`, `font-medium`).
+        - [ ] Implement hover states (`hover:opacity-75`).
+        - [ ] Use Next.js `Link` component for client-side navigation.
+        - [ ] Add proper spacing between links (`space-y-2` or similar).
+
+    - [ ] **Step 4: Social Media & Logo Section**
+        - [ ] Create `/src/components/layout/menu/SocialSection.tsx` as a server component.
+        - [ ] Container: Use Flexbox (`flex`, `justify-between`, `items-center`).
+        - [ ] **Social Icons (Left Side):**
+            - [ ] Create Instagram and Facebook SVG icons or use icon library.
+            - [ ] Wrap in `<a>` tags with proper `href` attributes.
+            - [ ] Consistent sizing (`w-6`, `h-6`) and spacing (`space-x-4`).
+            - [ ] Add hover states and accessibility attributes.
+        - [ ] **Brand Logo (Right Side):**
+            - [ ] Create or import "in lieu" SVG logo.
+            - [ ] Ensure proper alignment with social icons.
+            - [ ] Make logo clickable to navigate to homepage.
+
+    - [ ] **Step 5: Enhanced MenuModal.tsx Integration**
+        - [ ] Update existing `MenuModal.tsx` to implement the new layout structure.
+        - [ ] **Main Container:**
+            - [ ] Fixed positioning: `fixed inset-0 z-40`.
+            - [ ] Background: `bg-white` or appropriate brand color.
+            - [ ] Responsive layout: `flex flex-col lg:flex-row`.
+            - [ ] Overall padding: `p-4` or `p-6`.
+        - [ ] **Mobile Layout (Column):**
+            - [ ] Image section: `flex-1` to fill remaining space.
+            - [ ] Bottom content section: `h-auto` with proper spacing.
+            - [ ] Vertical arrangement of PageLinks, SocialSection.
+        - [ ] **Desktop Layout (Row):**
+            - [ ] Image section: `lg:w-1/2` or `lg:w-3/5`, `h-screen`.
+            - [ ] Content section: `lg:w-1/2` or `lg:w-2/5`, `h-screen`.
+            - [ ] Content vertical arrangement: `flex flex-col justify-between` or `justify-center`.
+
+    - [ ] **Step 6: Data Integration & Props**
+        - [ ] Define TypeScript interfaces for all component props.
+        - [ ] Create mock data structure for product tags with coordinates.
+        - [ ] Implement data fetching for featured products (if needed).
+        - [ ] Pass navigation pages data to PageLinks component.
+        - [ ] Configure social media URLs and brand logo source.
+
+    - [ ] **Step 7: Responsive Behavior & Breakpoints**
+        - [ ] Test mobile view (iPhone 16 Pro reference).
+        - [ ] Test desktop view (Frame 87 reference).
+        - [ ] Implement smooth transitions between breakpoints.
+        - [ ] Ensure proper touch interactions on mobile.
+        - [ ] Verify image scaling and product tag positioning across devices.
+
+    - [ ] **Step 8: Integration with Existing Components**
+        - [ ] Ensure `SectionLinks.tsx` renders correctly in bottom-left (mobile) or appropriate position (desktop).
+        - [ ] Verify `Navbar.tsx` integration and z-index layering.
+        - [ ] Test modal open/close animations and body scroll locking.
+        - [ ] Implement proper focus management for accessibility.
+
+    - [ ] **Step 9: Final Polish & Testing**
+        - [ ] Add loading states for image and product data.
+        - [ ] Implement error handling for failed image loads.
+        - [ ] Test keyboard navigation and screen reader compatibility.
+        - [ ] Optimize performance (lazy loading, image optimization).
+        - [ ] Cross-browser testing and mobile device testing.
+
+
 ## Phase 3: Styling & Finalization
 
 1.  **Styling:**
