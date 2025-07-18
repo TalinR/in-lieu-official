@@ -6,6 +6,7 @@ import PageLinks from './PageLinks';
 import SocialSelection from './SocialSelection';
 import { usePathname } from 'next/navigation';
 import { useSections } from '../SectionsContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface MenuModalProps {
   isOpen: boolean;
@@ -35,7 +36,7 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
 
   // Define menu-specific sections
   const menuSections = [
-    { id: 'menu', name: 'image' },
+    { id: 'menu', name: 'menu' },
 
   ];
 
@@ -65,16 +66,17 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex flex-col bg-white p-6 pb-30 lg:flex-row">
+    <div id="menu" className="fixed inset-0 z-40 flex flex-col bg-white p-6 pb-16 lg:flex-row">
       {/* 
         Image Section 
         - Mobile: Takes up the remaining space (flex-1)
         - Desktop: Takes up 3/5 of the width
       */}
-      <div id="menu" className="flex-1 lg:w-3/5">
+      <div className="flex-1 lg:w-3/5">
         <ResponsiveSafeImage
           src="/images/test_image.png"
           alt="A beautiful landscape"
+          imageClassName="transition-opacity duration-1000 ease-in-out"
           // Optional: customize the safe area. 
           // Defaults to x: 0.3 (30%) and y: 0.5 (50%) if not provided.
           // safeArea={{ x: 0.4, y: 0.6 }} 
@@ -88,13 +90,13 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
       <div className="flex flex-col lg:w-2/5" >
         {/* <h1 className="text-2xl font-bold text-center">Menu</h1> */}
 
-        <div className="mt-4">
+        <div className="my-10">
           <PageLinks pages={pages} currentPath={currentPath} onLinkClick={onLinkClick} />
         </div>
 
-        <hr className="border-t border-gray-300 w-full my-8 lg:hidden" />
+        <hr className="border-t border-gray-300 w-full lg:hidden" />
 
-        <div>
+        <div className="my-10">
           <SocialSelection />
         </div>
       </div>

@@ -32,7 +32,7 @@ const PageLinks = ({ pages, currentPath, onLinkClick }: PageLinksProps) => {
                 className={`text-sm font-regular transition-colors duration-200 ${
                   isActive 
                     ? 'text-[#635BFF]' 
-                    : 'text-gray-800'
+                    : 'text-gray-800 font-light'
                 }`}
               >
                 {page.name}

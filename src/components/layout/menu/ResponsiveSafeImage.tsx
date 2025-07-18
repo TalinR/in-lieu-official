@@ -5,12 +5,14 @@ interface ResponsiveSafeImageProps {
   src: string;
   alt: string;
   safeArea?: { x: number; y: number };
+  imageClassName?: string;
 }
 
 const ResponsiveSafeImage = ({
   src,
   alt,
   safeArea = { x: 0.1, y: 0.4 },
+  imageClassName,
 }: ResponsiveSafeImageProps) => {
   // Refs for the container and the image elements
   const containerRef = useRef<HTMLDivElement>(null);
@@ -77,7 +79,6 @@ const ResponsiveSafeImage = ({
       top: `${top}px`,
       maxWidth: 'none', // Override any potential max-width from parent CSS
       opacity: 1, // Make it visible
-      transition: 'opacity 0.3s ease-in-out',
     });
   }, [safeArea.x, safeArea.y]); // Dependency array for useCallback
 
@@ -116,6 +117,7 @@ const ResponsiveSafeImage = ({
         ref={imageRef}
         src={src}
         alt={alt}
+        className={imageClassName}
         style={imageStyle}
         // Run calculation in case the image is already cached and 'load' doesn't fire
         onLoad={calculateStyle}

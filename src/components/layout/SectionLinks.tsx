@@ -160,7 +160,7 @@ const SectionLinks = () => {
       className="fixed bottom-6 left-8 z-[70] flex flex-col items-start mix-blend-difference "
     >
       <div
-        className="absolute left-[-.7rem] w-[0.8px] bg-[#FFFFFF] transition-all duration-300 ease-out"
+        className="absolute left-[-.7rem] w-[01px] bg-[#FFFFFF] transition-all duration-600 ease-out"
         style={{
           bottom: indicatorStyle.bottom,
           height: indicatorStyle.height,
