@@ -162,14 +162,14 @@ This document outlines the steps to rebuild the In Lieu website using Next.js an
 6.  **Menu Modal**
     - **Objective:** Build a responsive pop-out menu modal with image, product tags, page navigation, social media icons, and brand logo. The layout adapts from mobile (stacked) to desktop (side-by-side).
 
-    - [ ] **Step 1: MenuImage.tsx Component**
-        - [ ] Create `/src/components/layout/menu/MenuImage.tsx` as a client component.
-        - [ ] Integrate the existing `ResponsiveSafeImage.tsx` component for image display.
+    - [x] **Step 1: MenuImage.tsx Component**
+        - [x] Create `/src/components/layout/menu/MenuImage.tsx` as a client component.
+        - [x] Integrate the existing `ResponsiveSafeImage.tsx` component for image display.
         - [ ] Accept props: `imageSrc`, `imageAlt`, and `productTags` array.
         - [ ] Implement container with relative positioning to support absolute-positioned product tags.
-        - [ ] Mobile styling: Use `flex-1` to fill remaining vertical space in flex column layout.
-        - [ ] Desktop styling: Use `lg:w-1/2` or `lg:w-3/5` for fixed width, `h-screen` for full height.
-        - [ ] Render `ProductTag` components with absolute positioning based on tag coordinates.
+        - [x] Mobile styling: Use `flex-1` to fill remaining vertical space in flex column layout.
+        - [x] Desktop styling: Use `lg:w-1/2` or `lg:w-3/5` for fixed width, `h-screen` for full height.
+        - [x] Render `ProductTag` components with absolute positioning based on tag coordinates.
 
     - [ ] **Step 2: ProductTag.tsx Component**
         - [ ] Create `/src/components/layout/menu/ProductTag.tsx` as a client component.
@@ -180,27 +180,47 @@ This document outlines the steps to rebuild the In Lieu website using Next.js an
         - [ ] Handle click events to navigate to product pages (`/product/[handle]`).
         - [ ] Ensure tags are responsive and scale appropriately on different screen sizes.
 
-    - [ ] **Step 3: PageLinks.tsx Component**
-        - [ ] Create `/src/components/layout/menu/PageLinks.tsx` as a server component.
-        - [ ] Accept props: `pages` array with `{ name: string, href: string }` structure.
-        - [ ] Render navigation links for main site pages ("collection", "delivery and returns").
-        - [ ] Styling: Block-level elements with clean typography (`text-lg`, `font-medium`).
-        - [ ] Implement hover states (`hover:opacity-75`).
-        - [ ] Use Next.js `Link` component for client-side navigation.
-        - [ ] Add proper spacing between links (`space-y-2` or similar).
+    - [x] **Step 3: PageLinks.tsx Component**
+        - [x] Create `/src/components/layout/menu/PageLinks.tsx` as a server component.
+        - [x] Accept props: `pages` array with `{ name: string, description: string, href: string }` structure.
+        - [x] Accept prop: `currentPath` string to determine which page is currently active.
+        - [x] Render navigation links for main site pages ("collection", "delivery and returns").
+        - [x] **Each page link structure:**
+            - [x] Title: Clean typography (`text-lg`, `font-medium` or similar).
+            - [x] Description: Smaller, lighter text below the title (`text-sm`, `text-gray-600` or similar).
+        - [x] **Dynamic styling based on current page:**
+            - [x] Active page: Different text color, font weight, or highlighting.
+            - [x] Inactive pages: Default styling with hover states (`hover:opacity-75`).
+        - [x] Use Next.js `Link` component for client-side navigation.
+        - [x] Add proper spacing between link groups (`space-y-4` or similar).
+        - [x] Ensure responsive behavior and proper touch targets on mobile.
 
-    - [ ] **Step 4: Social Media & Logo Section**
-        - [ ] Create `/src/components/layout/menu/SocialSection.tsx` as a server component.
-        - [ ] Container: Use Flexbox (`flex`, `justify-between`, `items-center`).
-        - [ ] **Social Icons (Left Side):**
-            - [ ] Create Instagram and Facebook SVG icons or use icon library.
-            - [ ] Wrap in `<a>` tags with proper `href` attributes.
-            - [ ] Consistent sizing (`w-6`, `h-6`) and spacing (`space-x-4`).
-            - [ ] Add hover states and accessibility attributes.
-        - [ ] **Brand Logo (Right Side):**
-            - [ ] Create or import "in lieu" SVG logo.
-            - [ ] Ensure proper alignment with social icons.
-            - [ ] Make logo clickable to navigate to homepage.
+    - [x] **Step 4: Social Media & Logo Section**
+        - [x] Create `/src/components/layout/menu/SocialSection.tsx` as a server component.
+        - [x] **Mobile Layout (Vertical Stack):**
+            - [x] Container: Use Flexbox (`flex flex-col items-center space-y-4`).
+            - [x] **Social Icons (Top Section):**
+                - [x] Create Instagram and TikTok SVG icons or use icon library.
+                - [x] Container for icons: `flex space-x-4` to place them side by side.
+                - [x] Wrap in `<a>` tags with proper `href` attributes.
+                - [x] Consistent sizing (`w-6`, `h-6`) and center alignment.
+                - [x] Add hover states and accessibility attributes.
+            - [x] **Brand Logo (Bottom Section):**
+                - [x] Create or import "in lieu" SVG logo.
+                - [x] Center-aligned below the social icons.
+                - [x] Make logo clickable to navigate to homepage.
+        - [x] **Desktop Layout (Horizontal):**
+            - [x] Container: Use Flexbox (`lg:flex-row lg:justify-between lg:items-center`).
+            - [x] **Social Icons (Left Side):**
+                - [x] Instagram and TikTok icons side by side (`flex space-x-4`).
+                - [x] Aligned to the left of the container.
+            - [x] **Brand Logo (Right Side):**
+                - [x] Aligned to the right of the container.
+                - [x] Maintains proper alignment with social icons.
+        - [x] **Responsive Behavior:**
+            - [x] Seamless transition between mobile (vertical) and desktop (horizontal) layouts.
+            - [x] Ensure proper spacing and alignment at all breakpoints.
+            - [x] Test touch interactions on mobile and hover states on desktop.
 
     - [ ] **Step 5: Enhanced MenuModal.tsx Integration**
         - [ ] Update existing `MenuModal.tsx` to implement the new layout structure.
@@ -245,6 +265,80 @@ This document outlines the steps to rebuild the In Lieu website using Next.js an
         - [ ] Optimize performance (lazy loading, image optimization).
         - [ ] Cross-browser testing and mobile device testing.
 
+7.  **SectionLinks Update**
+    - **Objective:** Transform SectionLinks into a global component that appears on every page (including when menu modal is open), with dynamic sections based on the current page and smooth animations when transitioning between pages.
+
+    - [ ] **Step 1: Integrate SectionLinks into Navbar Component**
+        - [ ] Move SectionLinks logic from individual pages into the Navbar component
+        - [ ] Update Navbar.tsx to include SectionLinks as a child component
+        - [ ] Adjust z-index to ensure SectionLinks appears above MenuModal (set to `z-[70]`)
+        - [ ] Remove SectionLinks from individual pages (starting with `/src/app/page.tsx`)
+        - [ ] Test that SectionLinks appears on all pages through the global navbar
+
+    - [ ] **Step 2: Create Sections Context Provider**
+        - [ ] Create `/src/components/layout/SectionsContext.tsx` with:
+            - Context for managing current page sections
+            - Provider component that wraps the app
+            - Hook `useSections()` for consuming sections
+            - Method `setSections(sections: Section[])` for updating sections
+        - [ ] Add SectionsProvider to the root layout (`/src/app/layout.tsx`)
+        - [ ] Define TypeScript interfaces for Section and SectionsContext
+
+    - [ ] **Step 3: Make SectionLinks Context-Aware**
+        - [ ] Update SectionLinks component to consume sections from context instead of props
+        - [ ] Add state management for tracking section changes
+        - [ ] Implement detection when sections array changes (page navigation)
+        - [ ] Add loading state while sections are being updated
+
+    - [ ] **Step 4: Implement Page-to-Page Transition Animations**
+        - [ ] **Exit Animation (Current sections sliding out):**
+            - [ ] Animate current section links sliding to the left and fading out
+            - [ ] Animate vertical indicator shrinking and moving off-screen
+            - [ ] Duration: ~300ms with easing function
+        - [ ] **Enter Animation (New sections sliding in):**
+            - [ ] New section links slide in from the left with fade-in effect
+            - [ ] Vertical indicator animates to new position and grows to fit first section
+            - [ ] Duration: ~300ms with easing function, delayed by ~150ms after exit
+        - [ ] Use Framer Motion or CSS transitions for smooth animations
+        - [ ] Ensure animations don't interfere with scroll-based indicator movement
+
+    - [ ] **Step 5: Update Individual Pages to Use Context**
+        - [ ] **Homepage (`/src/app/page.tsx`):**
+            - [ ] Add `useEffect` to call `setSections()` with homepage sections on mount
+            - [ ] Remove direct SectionLinks component usage
+            - [ ] Sections: `[{ id: 'makurro', name: 'makurro' }, { id: 'lookbook', name: 'lookbook' }, { id: 'about', name: 'about' }, { id: 'shop', name: 'shop' }]`
+        - [ ] **Other Pages (when created):**
+            - [ ] Delivery page: Set appropriate sections for that page's content
+            - [ ] Product pages: Set sections relevant to product content
+            - [ ] About page: Set sections for about page content
+
+    - [ ] **Step 6: Handle Edge Cases & States**
+        - [ ] **No Sections State:** Hide SectionLinks component when no sections are set
+        - [ ] **Single Section:** Handle case where only one section exists (no indicator animation)
+        - [ ] **Menu Modal Open:** Ensure SectionLinks remains visible and functional when menu is open
+        - [ ] **Page Load:** Handle initial page load with proper section initialization
+        - [ ] **Navigation Interruption:** Handle rapid page changes during animations
+
+    - [ ] **Step 7: Styling & Visual Polish**
+        - [ ] Ensure consistent positioning across all pages (`fixed bottom-6 left-8`)
+        - [ ] Maintain `mix-blend-difference` styling for visibility over varied backgrounds
+        - [ ] Add smooth hover states that work with the new animation system
+        - [ ] Test contrast and readability across different page backgrounds
+        - [ ] Ensure animations are performant and don't cause layout shifts
+
+    - [ ] **Step 8: Testing & Refinement**
+        - [ ] Test SectionLinks functionality on all existing pages
+        - [ ] Verify smooth animations during page transitions
+        - [ ] Test scroll behavior and indicator tracking on different screen sizes
+        - [ ] Ensure proper interaction with MenuModal (visibility and z-index)
+        - [ ] Test accessibility with keyboard navigation and screen readers
+        - [ ] Performance testing for animation smoothness
+
+    - [ ] **Step 9: Documentation & Cleanup**
+        - [ ] Update component documentation with new usage patterns
+        - [ ] Create examples of how pages should implement section setting
+        - [ ] Remove old SectionLinks usage patterns from codebase
+        - [ ] Add TypeScript types for better developer experience
 
 ## Phase 3: Styling & Finalization
 

@@ -53,16 +53,19 @@ const ResponsiveSafeImage = ({
 
     // Calculate the top/left position to center the scaled image
     const left = (cWidth - newImageWidth) / 2;
-    // const top = (cHeight - newImageHeight) / 2;
-    let top: number;
+    const top = (cHeight - newImageHeight) / 2;
+
+
+    // we'll need this code if we have a "smaller full image size, and want to top align. This wont be the case for now"
+    // let top: number;
     
 
-    if ((cHeight - newImageHeight)<0) {
-      top = (cHeight - newImageHeight) / 2
-    }
-    else{
-      top=0
-    }
+    // if ((cHeight - newImageHeight)<0) {
+    //   top = (cHeight - newImageHeight) / 2
+    // }
+    // else{
+    //   top=0
+    // }
 
 
     // Set the new style to position and scale the image

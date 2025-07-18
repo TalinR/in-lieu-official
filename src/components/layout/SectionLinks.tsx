@@ -4,13 +4,22 @@ import React, { useState, useEffect, useRef } from "react";
 
 interface Section {
   id: string;
-  // ... existing code ...
   name: string;
 }
 
 interface SectionLinksProps {
   sections: Section[];
 }
+
+
+
+/**
+ * A fixed-position navigation component that displays links to page sections.
+ * It features a vertical indicator bar that smoothly tracks the user's scroll
+ * progress through the sections.
+ * @param {SectionLinksProps} props - The component props.
+ * @returns {React.ReactElement} The rendered navigation element.
+ */
 
 const SectionLinks = ({ sections }: SectionLinksProps) => {
   const [indicatorStyle, setIndicatorStyle] = useState({ top: 0, height: 0 });
@@ -108,6 +117,10 @@ const SectionLinks = ({ sections }: SectionLinksProps) => {
       const initialTop = currentLinkEl.offsetTop;
       const initialHeight = currentLinkEl.offsetHeight;
 
+
+      // Linearly interpolate the top and height of the indicator based on
+      // the scroll progress within the current section. This creates the smooth
+      // continuous movement effect.
       let top = initialTop;
       let height = initialHeight;
 

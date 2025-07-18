@@ -52,7 +52,7 @@ const Navbar = () => {
         </div>
       )}
 
-      <MenuModal isOpen={isMenuOpen} />
+      <MenuModal isOpen={isMenuOpen} onLinkClick={toggleMenu} />
     </>
   );
 };
