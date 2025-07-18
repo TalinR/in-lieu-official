@@ -1,28 +1,18 @@
 "use client";
 // ... existing code ...
 import React, { useState, useEffect, useRef } from "react";
-
-interface Section {
-  id: string;
-  name: string;
-}
-
-interface SectionLinksProps {
-  sections: Section[];
-}
-
-
+import { useSections } from "./SectionsContext";
 
 /**
  * A fixed-position navigation component that displays links to page sections.
  * It features a vertical indicator bar that smoothly tracks the user's scroll
- * progress through the sections.
- * @param {SectionLinksProps} props - The component props.
- * @returns {React.ReactElement} The rendered navigation element.
+ * progress through the sections. Now uses context to get sections dynamically.
+ * @returns {React.ReactElement | null} The rendered navigation element or null if no sections.
  */
 
-const SectionLinks = ({ sections }: SectionLinksProps) => {
-  const [indicatorStyle, setIndicatorStyle] = useState({ top: 0, height: 0 });
+const SectionLinks = () => {
+  const { sections } = useSections();
+  const [indicatorStyle, setIndicatorStyle] = useState({ bottom: 0, height: 0 });
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const navRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -50,6 +40,7 @@ const SectionLinks = ({ sections }: SectionLinksProps) => {
     // using the height of the "links" and the progress as a number between 0 and 1
     const handleScroll = () => {
       if (!navRef.current) return;
+      const containerHeight = navRef.current.offsetHeight;
 
       // get the current vertical scroll position of the page in pixels
       const scrollY = window.scrollY;
@@ -131,8 +122,10 @@ const SectionLinks = ({ sections }: SectionLinksProps) => {
         top = initialTop + (nextTop - initialTop) * progress;
         height = initialHeight + (nextHeight - initialHeight) * progress;
       }
+      
+      const bottom = containerHeight - (top + height);
 
-      setIndicatorStyle({ top, height });
+      setIndicatorStyle({ bottom, height });
     };
 
     let ticking = false;
@@ -156,15 +149,20 @@ const SectionLinks = ({ sections }: SectionLinksProps) => {
     };
   }, [sections]);
 
+  // Remove early return for isLoading; keep only for no sections.
+  if (!sections || sections.length === 0) {
+    return null;
+  }
+
   return (
     <div
       ref={navRef}
-      className="fixed bottom-6 left-8 z-[60] flex flex-col items-start mix-blend-difference"
+      className="fixed bottom-6 left-8 z-[70] flex flex-col items-start mix-blend-difference "
     >
       <div
-        className="absolute left-[-.7rem] w-[0.8px] bg-[#FFFFFF]"
+        className="absolute left-[-.7rem] w-[0.8px] bg-[#FFFFFF] transition-all duration-300 ease-out"
         style={{
-          top: indicatorStyle.top,
+          bottom: indicatorStyle.bottom,
           height: indicatorStyle.height,
         }}
       />

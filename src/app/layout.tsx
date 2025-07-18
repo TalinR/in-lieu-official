@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Navbar from '@/components/layout/navbar/Navbar';
+import { SectionsProvider } from '@/components/layout/SectionsContext';
 
 export const metadata: Metadata = {
   title: 'In Lieu',
@@ -15,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans antialiased">
-        <Navbar />
-        {children}
+        <SectionsProvider>
+          <Navbar />
+          {children}
+        </SectionsProvider>
       </body>
     </html>
   );

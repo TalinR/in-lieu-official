@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import CartButton from './CartButton';
 import MenuButton from './MenuButton';
 import MenuModal from '../menu/MenuModal';
-
+import SectionLinks from '../SectionLinks';
 
 const Navbar = () => {
   const [isCartOpen, setCartOpen] = useState(false);
@@ -28,6 +28,9 @@ const Navbar = () => {
 
   return (
     <>
+      {/* SectionLinks now gets sections from context */}
+      <SectionLinks />
+
       <div className="fixed bottom-4 right-4 z-50">
         <nav className="navbar-bg-glass flex w-full items-center gap-x-3 rounded-full p-2 shadow-lg">
           {/* <div className="flex-1 pl-4 pr-1">

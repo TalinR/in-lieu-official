@@ -268,27 +268,27 @@ This document outlines the steps to rebuild the In Lieu website using Next.js an
 7.  **SectionLinks Update**
     - **Objective:** Transform SectionLinks into a global component that appears on every page (including when menu modal is open), with dynamic sections based on the current page and smooth animations when transitioning between pages.
 
-    - [ ] **Step 1: Integrate SectionLinks into Navbar Component**
-        - [ ] Move SectionLinks logic from individual pages into the Navbar component
-        - [ ] Update Navbar.tsx to include SectionLinks as a child component
-        - [ ] Adjust z-index to ensure SectionLinks appears above MenuModal (set to `z-[70]`)
-        - [ ] Remove SectionLinks from individual pages (starting with `/src/app/page.tsx`)
-        - [ ] Test that SectionLinks appears on all pages through the global navbar
+    - [x] **Step 1: Integrate SectionLinks into Navbar Component**
+        - [x] Move SectionLinks logic from individual pages into the Navbar component
+        - [x] Update Navbar.tsx to include SectionLinks as a child component
+        - [x] Adjust z-index to ensure SectionLinks appears above MenuModal (set to `z-[70]`)
+        - [x] Remove SectionLinks from individual pages (starting with `/src/app/page.tsx`)
+        - [x] Test that SectionLinks appears on all pages through the global navbar
 
-    - [ ] **Step 2: Create Sections Context Provider**
-        - [ ] Create `/src/components/layout/SectionsContext.tsx` with:
+    - [x] **Step 2: Create Sections Context Provider**
+        - [x] Create `/src/components/layout/SectionsContext.tsx` with:
             - Context for managing current page sections
             - Provider component that wraps the app
             - Hook `useSections()` for consuming sections
             - Method `setSections(sections: Section[])` for updating sections
-        - [ ] Add SectionsProvider to the root layout (`/src/app/layout.tsx`)
-        - [ ] Define TypeScript interfaces for Section and SectionsContext
+        - [x] Add SectionsProvider to the root layout (`/src/app/layout.tsx`)
+        - [x] Define TypeScript interfaces for Section and SectionsContext
 
-    - [ ] **Step 3: Make SectionLinks Context-Aware**
-        - [ ] Update SectionLinks component to consume sections from context instead of props
-        - [ ] Add state management for tracking section changes
-        - [ ] Implement detection when sections array changes (page navigation)
-        - [ ] Add loading state while sections are being updated
+    - [x] **Step 3: Make SectionLinks Context-Aware**
+        - [x] Update SectionLinks component to consume sections from context instead of props
+        - [x] Add state management for tracking section changes
+        - [x] Implement detection when sections array changes (page navigation)
+        - [x] Add loading state while sections are being updated
 
     - [ ] **Step 4: Implement Page-to-Page Transition Animations**
         - [ ] **Exit Animation (Current sections sliding out):**
@@ -303,10 +303,10 @@ This document outlines the steps to rebuild the In Lieu website using Next.js an
         - [ ] Ensure animations don't interfere with scroll-based indicator movement
 
     - [ ] **Step 5: Update Individual Pages to Use Context**
-        - [ ] **Homepage (`/src/app/page.tsx`):**
-            - [ ] Add `useEffect` to call `setSections()` with homepage sections on mount
-            - [ ] Remove direct SectionLinks component usage
-            - [ ] Sections: `[{ id: 'makurro', name: 'makurro' }, { id: 'lookbook', name: 'lookbook' }, { id: 'about', name: 'about' }, { id: 'shop', name: 'shop' }]`
+        - [x] **Homepage (`/src/app/page.tsx`):**
+            - [x] Add `useEffect` to call `setSections()` with homepage sections on mount
+            - [x] Remove direct SectionLinks component usage
+            - [x] Sections: `[{ id: 'makurro', name: 'makurro' }, { id: 'lookbook', name: 'lookbook' }, { id: 'about', name: 'about' }, { id: 'shop', name: 'shop' }]`
         - [ ] **Other Pages (when created):**
             - [ ] Delivery page: Set appropriate sections for that page's content
             - [ ] Product pages: Set sections relevant to product content

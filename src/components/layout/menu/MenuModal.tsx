@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ResponsiveSafeImage from './ResponsiveSafeImage';
 import PageLinks from './PageLinks';
 import SocialSelection from './SocialSelection';
 import { usePathname } from 'next/navigation';
+import { useSections } from '../SectionsContext';
 
 interface MenuModalProps {
   isOpen: boolean;
@@ -13,10 +14,10 @@ interface MenuModalProps {
 
 const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
   const currentPath = usePathname();
-
-  if (!isOpen) {
-    return null;
-  }
+  const { sections, setSections } = useSections();
+  
+  // Store the original sections when modal opens
+  const originalSectionsRef = useRef<typeof sections>([]);
 
   // Sample page data
   const pages = [
@@ -32,6 +33,37 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
     }
   ];
 
+  // Define menu-specific sections
+  const menuSections = [
+    { id: 'menu', name: 'image' },
+
+  ];
+
+  useEffect(() => {
+    if (isOpen) {
+      // Save current sections and set menu sections
+      originalSectionsRef.current = [...sections];
+      setSections(menuSections);
+    } else {
+      // Restore original sections when modal closes
+      if (originalSectionsRef.current.length > 0) {
+        setSections(originalSectionsRef.current);
+        originalSectionsRef.current = []; // Clear the ref after restoration
+      }
+    }
+    
+    // Cleanup function: restore sections if component unmounts while modal is open
+    return () => {
+      if (isOpen && originalSectionsRef.current.length > 0) {
+        setSections(originalSectionsRef.current);
+      }
+    };
+  }, [isOpen, setSections]); // sections dependency removed to prevent infinite loops
+
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <div className="fixed inset-0 z-40 flex flex-col bg-white p-6 pb-30 lg:flex-row">
       {/* 
@@ -39,8 +71,8 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
         - Mobile: Takes up the remaining space (flex-1)
         - Desktop: Takes up 3/5 of the width
       */}
-      <div className="flex-1 lg:w-3/5">
-      <ResponsiveSafeImage
+      <div id="menu" className="flex-1 lg:w-3/5">
+        <ResponsiveSafeImage
           src="/images/test_image.png"
           alt="A beautiful landscape"
           // Optional: customize the safe area. 
