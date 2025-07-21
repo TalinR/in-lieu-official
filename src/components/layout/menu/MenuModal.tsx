@@ -95,12 +95,12 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
           initial="hidden"
           animate="show"
           exit="exit"
-          className="fixed inset-0 z-40 flex flex-col bg-white p-6 pb-16 md:flex-row md:pl-10 md:pr-10 md:pb-20 md:pt-10 lg:px-15 lg:py-20 xl:px-40 xl:py-40 landscape:py-100"
+          className="fixed inset-0 z-40 flex flex-col bg-white p-6 pb-16 landscape:lg:flex-row landscape:flex-row landscape:pl-10 landscape:pr-10 landscape:pb-20 landscape:pt-10 landscape:lg:px-30 landscape:lg:py-30 xl:px-40 xl:py-40"
         >
           {/*  Image div
             This is the top div, containing the image and product tags
             Animation: have the image animating first */}
-          <motion.div variants={item} className="flex-1 lg:w-3/5">
+          <motion.div variants={item} className="flex-1 landscape:lg:w-3/5">
             <ResponsiveSafeImage
               src="/images/test_image.png"
               alt="A beautiful landscape"
@@ -111,17 +111,19 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
           {/*  this is where all the PageLinks, and logos will be
             On mobile, we'll have this directly underneath the image div
             On desktop, we'll have this on the right side of the screen */}
-          <motion.div variants={container} className="flex flex-col md:w-3/5 md:pl-10 lg:pl-16">
+          <motion.div variants={container} className="flex flex-col 
+                                                      landscape:w-3/5 landscape:pl-10 
+                                                      landscape:lg:w-2/5 landscape:lg:pl-10">
             {/* Links
             Animation: */}
-            <motion.div variants={item} className="my-10 md:my-2 lg:my-2">
+            <motion.div variants={item} className="my-10 landscape:my-2 landscape:lg:my-2">
               <PageLinks pages={pages} currentPath={currentPath} onLinkClick={onLinkClick} />
             </motion.div>
 
             {/* second “slot” → both inner elements run in parallel */}
-            <motion.div variants={item} className="md:mt-auto lg:mt-auto">
-              <hr className="border-t border-gray-300 w-full md:hidden lg:hidden" />
-              <div className="my-10 md:my-2 lg:my-0">
+            <motion.div variants={item} className="landscape:mt-auto landscape:lg:mt-auto">
+              <hr className="border-t border-gray-300 w-full landscape:hidden landscape:lg:hidden" />
+              <div className="my-10 landscape:my-2 landscape:lg:my-0">
                 <SocialSelection />
               </div>
             </motion.div>

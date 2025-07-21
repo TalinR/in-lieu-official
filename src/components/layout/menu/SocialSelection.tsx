@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const SocialSelection = () => {
   return (
-    <div className="flex flex-col items-center space-y-4 md:flex-row md:justify-between md:items-center md:space-y-0">
+    <div className="flex flex-col items-center space-y-4 landscape:md:flex-row landscape:md:justify-between landscape:md:items-center landscape:md:space-y-0">
       {/* Social Icons Section */}
       <div className="flex space-x-2 lg:space-x-3">
         {/* Facebook Icon */}
