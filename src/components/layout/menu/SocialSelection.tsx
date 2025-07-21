@@ -3,9 +3,9 @@ import Image from 'next/image';
 
 const SocialSelection = () => {
   return (
-    <div className="flex flex-col items-center space-y-4 lg:flex-row lg:justify-between lg:items-center lg:space-y-0">
+    <div className="flex flex-col items-center space-y-4 md:flex-row md:justify-between md:items-center md:space-y-0">
       {/* Social Icons Section */}
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 lg:space-x-3">
         {/* Facebook Icon */}
         <a
           href="https://facebook.com/inlieu"
@@ -17,9 +17,9 @@ const SocialSelection = () => {
           <Image
             src="/images/icons/facebook_icon.png"
             alt="Facebook"
-            width={24}
-            height={24}
-            className="w-5 h-5"
+            width={512}
+            height={512}
+            className="w-5 h-5 lg:w-7 lg:h-7"
           />
         </a>
 
@@ -34,9 +34,9 @@ const SocialSelection = () => {
           <Image
             src="/images/icons/tiktok_icon.svg"
             alt="TikTok"
-            width={24}
-            height={24}
-            className="w-5 h-5"
+            width={512}
+            height={512}
+            className="w-5 h-5 lg:w-7 lg:h-7"
           />
         </a>
       </div>
@@ -50,9 +50,9 @@ const SocialSelection = () => {
         <Image
           src="/images/logo/black_logo.svg"
           alt="In Lieu"
-          width={80}
-          height={24}
-          className="h-7 w-auto"
+          width={512}
+          height={512}
+          className="h-7 w-auto lg:h-10"
         />
       </Link>
     </div>

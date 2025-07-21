@@ -13,6 +13,12 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Add this plugin to easily create custom variants
+    function ({ addVariant }) {
+      addVariant('portrait', '@media (orientation: portrait)');
+      addVariant('landscape', '@media (orientation: landscape)');
+    },
+  ],
 };
 export default config; 
