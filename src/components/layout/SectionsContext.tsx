@@ -37,27 +37,15 @@ interface SectionsProviderProps {
 // Provider component
 export const SectionsProvider: React.FC<SectionsProviderProps> = ({ children }) => {
   const [sections, setSectionsState] = useState<Section[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Memoized setter function to prevent unnecessary re-renders
   const setSections = useCallback((newSections: Section[]) => {
-    setIsLoading(true);
-    
-    // Small delay to allow for smooth transitions (will be useful for animations later)
-    setTimeout(() => {
-      setSectionsState(newSections);
-      setIsLoading(false);
-    }, 0);
+    setSectionsState(newSections);
   }, []);
 
   // Clear sections function
   const clearSections = useCallback(() => {
-    setIsLoading(true);
-    
-    setTimeout(() => {
-      setSectionsState([]);
-      setIsLoading(false);
-    }, 0);
+    setSectionsState([]);
   }, []);
 
   // Memoized context value to prevent unnecessary re-renders
@@ -65,8 +53,8 @@ export const SectionsProvider: React.FC<SectionsProviderProps> = ({ children }) 
     sections,
     setSections,
     clearSections,
-    isLoading,
-  }), [sections, setSections, clearSections, isLoading]);
+    isLoading: false, // Simplified since we're not actually loading asynchronously
+  }), [sections, setSections, clearSections]);
 
   return (
     <SectionsContext.Provider value={contextValue}>
