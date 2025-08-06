@@ -145,7 +145,7 @@ const SectionLinksFramerMotion = () => {
           height: newIndicatorStyle.height,
           transition: {
             type: "spring",
-            stiffness: 280,
+            stiffness: 200,
             damping: 25,
             mass: 1,
             duration: 0.8
@@ -278,7 +278,7 @@ const SectionLinksFramerMotion = () => {
             linkRefs.current[index] = el;
           }}
           onClick={handleLinkClick}
-          className={`font-light text-sm leading-relaxed transition-colors duration-300 ${
+          className={`font-light text-sm leading-relaxed transition-colors ${
             indicatorState.activeSectionIndex === index 
               ? "text-white" 
               : "text-[#838383]"
