@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { getProduct } from '@/lib/shopify';
 import { ProductProvider } from '@/components/product/product-context';
 import { HIDDEN_PRODUCT_TAG } from '@/lib/constants';
+import { AddToCart } from '@/components/cart/add-to-cart';
+import Price from '@/components/price';
 import Image from 'next/image';
 
 export async function generateMetadata(props: {
@@ -66,7 +68,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
   };
 
   return (
-    <ProductProvider product={product}>
+    <ProductProvider>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -103,23 +105,23 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
             {/* Price */}
             <div className="text-2xl font-semibold text-gray-900">
               {product.priceRange.minVariantPrice.amount === product.priceRange.maxVariantPrice.amount ? (
-                <span>
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: product.priceRange.minVariantPrice.currencyCode
-                  }).format(parseFloat(product.priceRange.minVariantPrice.amount))}
-                </span>
+                <Price
+                  amount={product.priceRange.minVariantPrice.amount}
+                  currencyCode={product.priceRange.minVariantPrice.currencyCode}
+                />
               ) : (
                 <span>
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: product.priceRange.minVariantPrice.currencyCode
-                  }).format(parseFloat(product.priceRange.minVariantPrice.amount))}
+                  <Price
+                    amount={product.priceRange.minVariantPrice.amount}
+                    currencyCode={product.priceRange.minVariantPrice.currencyCode}
+                    className="inline"
+                  />
                   {' - '}
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: product.priceRange.maxVariantPrice.currencyCode
-                  }).format(parseFloat(product.priceRange.maxVariantPrice.amount))}
+                  <Price
+                    amount={product.priceRange.maxVariantPrice.amount}
+                    currencyCode={product.priceRange.maxVariantPrice.currencyCode}
+                    className="inline"
+                  />
                 </span>
               )}
             </div>
@@ -136,6 +138,11 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
               ) : (
                 <span className="text-red-600 font-medium">Out of Stock</span>
               )}
+            </div>
+
+            {/* Add to Cart Button */}
+            <div className="mt-6">
+              <AddToCart product={product} />
             </div>
           </div>
         </div>

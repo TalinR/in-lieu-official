@@ -3,21 +3,23 @@
 import React from 'react';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
+import { useCart } from '@/components/cart/cart-context';
 
 type CartButtonProps = {
   onClick: () => void;
-  quantity?: number;
 };
 
-const CartButton = ({ onClick, quantity = 1 }: CartButtonProps) => {
+const CartButton = ({ onClick }: CartButtonProps) => {
+  const { cart } = useCart();
+  const quantity = cart?.totalQuantity || 0;
+
   return (
-    // Use a relative container to position the button and the badge
     <div className="relative h-10 w-10">
       <button
         onClick={onClick}
         aria-label="Open cart"
         className={clsx(
-          'absolute inset-0 flex items-center justify-center rounded-full text-black', // Fill the container
+          'absolute inset-0 flex items-center justify-center rounded-full text-black',
           'bg-[#FFFFFF17] backdrop-blur-sm',
           'shadow-figma-button',
         )}
@@ -25,15 +27,17 @@ const CartButton = ({ onClick, quantity = 1 }: CartButtonProps) => {
         <ShoppingBagIcon className="h-6 w-6" />
       </button>
 
-      <div
-        className={clsx(
-          'pointer-events-none absolute right-0 top-0 -mr-1 -mt-1 flex h-4 w-4 items-center justify-center rounded-full text-xs font-medium text-white',
-          'bg-[#FFFFFF17] backdrop-blur-sm', // Same transparency styles
-          'shadow-figma-button'
-        )}
-      >
-        {quantity}
-      </div>
+      {quantity > 0 && (
+        <div
+          className={clsx(
+            'pointer-events-none absolute right-0 top-0 -mr-1 -mt-1 flex h-4 w-4 items-center justify-center rounded-full text-xs font-medium text-white',
+            'bg-[#FFFFFF17] backdrop-blur-sm',
+            'shadow-figma-button'
+          )}
+        >
+          {quantity}
+        </div>
+      )}
     </div>
   );
 };

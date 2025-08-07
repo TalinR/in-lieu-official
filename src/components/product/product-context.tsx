@@ -1,31 +1,63 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
-import { Product } from '@/lib/shopify/types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { createContext, useContext, useMemo, useOptimistic } from 'react';
 
-interface ProductContextType {
-  product: Product;
-  state: Record<string, string>;
-}
+type ProductState = {
+  [key: string]: string;
+} & {
+  image?: string;
+};
+
+type ProductContextType = {
+  state: ProductState;
+  updateOption: (name: string, value: string) => ProductState;
+  updateImage: (index: string) => ProductState;
+};
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-export function ProductProvider({ 
-  children, 
-  product 
-}: { 
-  children: ReactNode;
-  product: Product;
-}) {
-  // For now, we'll keep state simple - just track the current product
-  // In a full implementation, this would handle variant selection
-  const state: Record<string, string> = {};
+export function ProductProvider({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams();
 
-  return (
-    <ProductContext.Provider value={{ product, state }}>
-      {children}
-    </ProductContext.Provider>
+  const getInitialState = () => {
+    const params: ProductState = {};
+    for (const [key, value] of searchParams.entries()) {
+      params[key] = value;
+    }
+    return params;
+  };
+
+  const [state, setOptimisticState] = useOptimistic(
+    getInitialState(),
+    (prevState: ProductState, update: ProductState) => ({
+      ...prevState,
+      ...update
+    })
   );
+
+  const updateOption = (name: string, value: string) => {
+    const newState = { [name]: value };
+    setOptimisticState(newState);
+    return { ...state, ...newState };
+  };
+
+  const updateImage = (index: string) => {
+    const newState = { image: index };
+    setOptimisticState(newState);
+    return { ...state, ...newState };
+  };
+
+  const value = useMemo(
+    () => ({
+      state,
+      updateOption,
+      updateImage
+    }),
+    [state]
+  );
+
+  return <ProductContext.Provider value={value}>{children}</ProductContext.Provider>;
 }
 
 export function useProduct() {
@@ -34,4 +66,16 @@ export function useProduct() {
     throw new Error('useProduct must be used within a ProductProvider');
   }
   return context;
+}
+
+export function useUpdateURL() {
+  const router = useRouter();
+
+  return (state: ProductState) => {
+    const newParams = new URLSearchParams(window.location.search);
+    Object.entries(state).forEach(([key, value]) => {
+      newParams.set(key, value);
+    });
+    router.push(`?${newParams.toString()}`, { scroll: false });
+  };
 }

@@ -3,30 +3,33 @@
 import clsx from 'clsx';
 import { Dialog, Transition } from '@headlessui/react';
 import { ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import LoadingDots from 'components/loading-dots';
-import Price from 'components/price';
-import { DEFAULT_OPTION } from 'lib/constants';
-import { createUrl } from 'lib/utils';
+import LoadingDots from '@/components/loading-dots';
+import Price from '@/components/price';
+import { DEFAULT_OPTION } from '@/lib/constants';
+import { createUrl } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { createCartAndSetCookie, redirectToCheckout } from './actions';
 import { useCart } from './cart-context';
 import { DeleteItemButton } from './delete-item-button';
 import { EditItemQuantityButton } from './edit-item-quantity-button';
-import OpenCart from './open-cart';
+
 
 type MerchandiseSearchParams = {
   [key: string]: string;
 };
 
-export default function CartModal() {
+type CartModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onOpen: () => void;
+};
+
+export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
   const { cart, updateCartItem } = useCart();
-  const [isOpen, setIsOpen] = useState(false);
   const quantityRef = useRef(cart?.totalQuantity);
-  const openCart = () => setIsOpen(true);
-  const closeCart = () => setIsOpen(false);
 
   useEffect(() => {
     if (!cart) {
@@ -35,25 +38,24 @@ export default function CartModal() {
   }, [cart]);
 
   useEffect(() => {
-    if (
-      cart?.totalQuantity &&
-      cart?.totalQuantity !== quantityRef.current &&
-      cart?.totalQuantity > 0
-    ) {
-      if (!isOpen) {
-        setIsOpen(true);
+    const newQuantity = cart?.totalQuantity ?? 0;
+
+    // If the quantity changed, decide what to do.
+    if (newQuantity !== quantityRef.current) {
+      // Open the modal only when the cart transitions from 0 → n (>0).
+      if (newQuantity > 0 && !isOpen) {
+        onOpen();
       }
-      quantityRef.current = cart?.totalQuantity;
+      // Always keep the ref in sync so future comparisons are correct.
+      quantityRef.current = newQuantity;
     }
-  }, [isOpen, cart?.totalQuantity, quantityRef]);
+  }, [isOpen, cart?.totalQuantity, onOpen]);
+
 
   return (
     <>
-      <button aria-label="Open cart" onClick={openCart}>
-        <OpenCart quantity={cart?.totalQuantity} />
-      </button>
       <Transition show={isOpen}>
-        <Dialog onClose={closeCart} className="relative z-50">
+        <Dialog onClose={onClose} className="relative z-50">
           <Transition.Child
             as={Fragment}
             enter="transition-all ease-in-out duration-300"
@@ -77,7 +79,7 @@ export default function CartModal() {
             <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
               <div className="flex items-center justify-between">
                 <p className="text-lg font-semibold">My Cart</p>
-                <button aria-label="Close cart" onClick={closeCart}>
+                <button aria-label="Close cart" onClick={onClose}>
                   <CloseCart />
                 </button>
               </div>
@@ -146,7 +148,7 @@ export default function CartModal() {
                                 </div>
                                 <Link
                                   href={merchandiseUrl}
-                                  onClick={closeCart}
+                                  onClick={onClose}
                                   className="z-30 ml-2 flex flex-row space-x-4"
                                 >
                                   <div className="flex flex-1 flex-col text-base">

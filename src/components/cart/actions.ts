@@ -1,13 +1,13 @@
 'use server';
 
-import { TAGS } from 'lib/constants';
+import { TAGS } from '@/lib/constants';
 import {
   addToCart,
   createCart,
   getCart,
   removeFromCart,
   updateCart
-} from 'lib/shopify';
+} from '@/lib/shopify';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -21,11 +21,25 @@ export async function addItem(
   }
 
   try {
+    // Attempt to add to an existing cart first.
     await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
-    revalidateTag(TAGS.cart);
   } catch (e) {
-    return 'Error adding item to cart';
+    /**
+     * The most common reason the previous call fails is because the user does
+     * not have a `cartId` cookie yet (e.g. first-time add-to-cart). We create a
+     * fresh cart, set the cookie, and retry.
+     */
+    try {
+      const newCart = await createCart();
+      (await cookies()).set('cartId', newCart.id!);
+      await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
+    } catch (err) {
+      return 'Error adding item to cart';
+    }
   }
+
+  // If we reach here the cart was updated successfully.
+  revalidateTag(TAGS.cart);
 }
 
 export async function removeItem(prevState: any, merchandiseId: string) {

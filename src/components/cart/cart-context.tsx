@@ -5,10 +5,11 @@ import type {
   CartItem,
   Product,
   ProductVariant
-} from 'lib/shopify/types';
+} from '@/lib/shopify/types';
 import React, {
   createContext,
   use,
+  useCallback,
   useContext,
   useMemo,
   useOptimistic
@@ -26,8 +27,15 @@ type CartAction =
       payload: { variant: ProductVariant; product: Product };
     };
 
-type CartContextType = {
-  cartPromise: Promise<Cart | undefined>;
+/**
+ * Cart context value that will be shared across the entire app. Having a single
+ * optimistic state here guarantees that every consumer (badge, modal, etc.)
+ * reacts instantly when we mutate the cart.
+ */
+export type CartContextType = {
+  cart: Cart | undefined;
+  updateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
+  addCartItem: (variant: ProductVariant, product: Product) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -190,6 +198,10 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
   }
 }
 
+/**
+ * The provider owns the single source of truth for the optimistic cart. Any
+ * component that calls `useCart()` will access this shared state.
+ */
 export function CartProvider({
   children,
   cartPromise
@@ -197,42 +209,46 @@ export function CartProvider({
   children: React.ReactNode;
   cartPromise: Promise<Cart | undefined>;
 }) {
-  return (
-    <CartContext.Provider value={{ cartPromise }}>
-      {children}
-    </CartContext.Provider>
-  );
-}
+  // Resolve the Promise that RootLayout passed. This happens only once on mount.
+  const initialCart = use(cartPromise);
 
-export function useCart() {
-  const context = useContext(CartContext);
-  if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
-
-  const initialCart = use(context.cartPromise);
   const [optimisticCart, updateOptimisticCart] = useOptimistic(
     initialCart,
     cartReducer
   );
 
-  const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
-    updateOptimisticCart({
-      type: 'UPDATE_ITEM',
-      payload: { merchandiseId, updateType }
-    });
-  };
-
-  const addCartItem = (variant: ProductVariant, product: Product) => {
-    updateOptimisticCart({ type: 'ADD_ITEM', payload: { variant, product } });
-  };
-
-  return useMemo(
-    () => ({
-      cart: optimisticCart,
-      updateCartItem,
-      addCartItem
-    }),
-    [optimisticCart]
+  const updateCartItem = useCallback(
+    (merchandiseId: string, updateType: UpdateType) => {
+      updateOptimisticCart({
+        type: 'UPDATE_ITEM',
+        payload: { merchandiseId, updateType }
+      });
+    },
+    [updateOptimisticCart]
   );
+
+  const addCartItem = useCallback(
+    (variant: ProductVariant, product: Product) => {
+      updateOptimisticCart({ type: 'ADD_ITEM', payload: { variant, product } });
+    },
+    [updateOptimisticCart]
+  );
+
+  const value = useMemo<CartContextType>(
+    () => ({ cart: optimisticCart, updateCartItem, addCartItem }),
+    [optimisticCart, updateCartItem, addCartItem]
+  );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+}
+
+/**
+ * Access the cart context. Throws if used outside of `<CartProvider>`.
+ */
+export function useCart() {
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
 }
