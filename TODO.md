@@ -361,3 +361,106 @@ This document outlines the steps to rebuild the In Lieu website using Next.js an
 - [ ] Set up analytics.
 - [ ] Perform SEO optimizations.
 - [ ] Final testing across multiple devices and browsers.
+
+
+
+
+
+## additional todo based on thoughts while developing 
+- Rapid double-clicking “Add to cart” could create duplicate optimistic updates before the server responds. Disabling the button while the server action is pending would harden this..
+
+
+## changes we made to official repo
+
+- non optimistic loading 
+
+## We made changes to cart-context.tsx
+
+## from AI:
+Why it feels “non-optimistic” right now
+
+1. Every component that calls `useCart()` creates its **own** `useOptimistic` state.
+   • `useCart()` fetches the cart promise, then runs  
+     `const [optimisticCart, updateOptimisticCart] = useOptimistic(...)`.
+
+2. Because that state lives inside the hook, each caller
+   ( `AddToCart`, `CartModal`, etc.) keeps an **independent copy** of the cart.
+
+3. When you press the “Add to cart” button the sequence is:
+   a. `AddToCart`’s `action` runs on the client.  
+      It calls `addCartItem(...)`, which updates **its own** optimisticCart.  
+      b. `CartModal` and the badge in the navbar are *different* components,
+      with *different* `useCart()` instances, so they don’t see that change.
+   c. After the server action (`addItem`) finishes, the page re-fetches the
+      real cart and everybody re-mounts with the updated data – that’s the delay
+      you’re observing.
+
+4. Inside the cart modal the quantity buttons feel instant because the buttons
+   and the UI that displays the quantity share the *same* `useCart()` instance
+   (they live in the same component tree), so they update together.
+
+Root cause
+
+`CartProvider` only puts `{ cartPromise }` in context.  
+The optimistic cart state and the mutating functions are **not** stored in that
+context, so they are not shared across the app.
+
+Fix: lift the optimistic state into the provider
+
+Move `useOptimistic` (and the helper functions) from the hook to the provider,
+store the current cart and the mutators in context, and make
+`useCart()` just read that context. With one central state, every component
+sees the optimistic update immediately.
+
+Sketch of the change
+```tsx
+// ...existing imports...
+type CartContextValue = {
+  cart: Cart | undefined;
+  addCartItem: (variant: ProductVariant, product: Product) => void;
+  updateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
+};
+
+const CartContext = createContext<CartContextValue | undefined>(undefined);
+
+export function CartProvider({
+  children, cartPromise
+}: { children: React.ReactNode; cartPromise: Promise<Cart | undefined>; }) {
+  const initialCart = use(cartPromise);
+  const [cart, dispatch] = useOptimistic(initialCart, cartReducer);
+
+  const addCartItem = (variant: ProductVariant, product: Product) =>
+    dispatch({ type: 'ADD_ITEM', payload: { variant, product } });
+
+  const updateCartItem = (merchandiseId: string, updateType: UpdateType) =>
+    dispatch({ type: 'UPDATE_ITEM', payload: { merchandiseId, updateType } });
+
+  const value = useMemo(
+    () => ({ cart, addCartItem, updateCartItem }),
+    [cart]
+  );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+}
+
+export function useCart() {
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error('useCart must be used within CartProvider');
+  return ctx;
+}
+```
+
+Now `AddToCart`, `CartModal`, the badge, etc. all consume the **same**
+optimistic state:
+
+```tsx
+const { addCartItem } = useCart();   // shared
+```
+
+Pressing “Add to cart” will immediately:
+• bump `cart.totalQuantity`,  
+• open the modal via the effect in `CartModal`,  
+• update the badge count,
+
+all before the server returns.
+
