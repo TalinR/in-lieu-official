@@ -41,7 +41,7 @@ export default function SizeSelector({ product }: { product: Product }) {
             className={
               [
                 // Square shape
-                "w-11 h-11 md:w-16 md:h-16",
+                "w-11 h-11",
                 // Center content
                 "inline-flex items-center justify-center",
                 // Rounding and fine border (0.5px)

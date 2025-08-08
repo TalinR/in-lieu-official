@@ -16,7 +16,7 @@ export default function PurchasePanel({ product }: { product: Product }) {
   const price = selected?.price ?? product.priceRange.minVariantPrice;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-end gap-3">
         <SizeSelector product={product} />
         <button
