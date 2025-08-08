@@ -1,28 +1,44 @@
 'use client';
 
-import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { addItem } from '@/components/cart/actions';
 import { useProduct } from '@/components/product/product-context';
 import { Product, ProductVariant } from '@/lib/shopify/types';
 import { useActionState } from 'react';
 import { useCart } from './cart-context';
+import Price from '@/components/price';
 
 function SubmitButton({
   availableForSale,
-  selectedVariantId
+  selectedVariantId,
+  price
 }: {
   availableForSale: boolean;
   selectedVariantId: string | undefined;
+  price: { amount: string; currencyCode: string };
 }) {
   const buttonClasses =
-    'relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white';
+    'relative flex w-full items-center justify-between rounded-lg bg-black px-5 py-3 text-white';
   const disabledClasses = 'cursor-not-allowed opacity-60 hover:opacity-60';
+
+  const Label = (
+    <span className="lowercase font-light tracking-normal">add to cart</span>
+  );
+  const PriceEl = (
+    <Price
+      amount={price.amount}
+      currencyCode={price.currencyCode}
+      className="font-light text-white"
+      showSymbol={false}
+      fractionDigits={0}
+    />
+  );
 
   if (!availableForSale) {
     return (
       <button disabled className={clsx(buttonClasses, disabledClasses)}>
-        Out Of Stock
+        <span className="lowercase font-light">out of stock</span>
+        {PriceEl}
       </button>
     );
   }
@@ -34,25 +50,16 @@ function SubmitButton({
         disabled
         className={clsx(buttonClasses, disabledClasses)}
       >
-        <div className="absolute left-0 ml-4">
-          <PlusIcon className="h-5" />
-        </div>
-        Add To Cart
+        {Label}
+        {PriceEl}
       </button>
     );
   }
 
   return (
-    <button
-      aria-label="Add to cart"
-      className={clsx(buttonClasses, {
-        'hover:opacity-90': true
-      })}
-    >
-      <div className="absolute left-0 ml-4">
-        <PlusIcon className="h-5" />
-      </div>
-      Add To Cart
+    <button aria-label="Add to cart" className={clsx(buttonClasses, 'hover:opacity-90')}>
+      {Label}
+      {PriceEl}
     </button>
   );
 }
@@ -74,6 +81,9 @@ export function AddToCart({ product }: { product: Product }) {
   const finalVariant = variants.find(
     (variant) => variant.id === selectedVariantId
   )!;
+  const displayPrice =
+    variant?.price ||
+    (variants.length === 1 ? variants[0].price : product.priceRange.minVariantPrice);
 
   return (
     <form
@@ -85,6 +95,7 @@ export function AddToCart({ product }: { product: Product }) {
       <SubmitButton
         availableForSale={availableForSale}
         selectedVariantId={selectedVariantId}
+        price={{ amount: displayPrice.amount, currencyCode: displayPrice.currencyCode }}
       />
       <p aria-live="polite" className="sr-only" role="status">
         {message}

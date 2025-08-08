@@ -30,6 +30,7 @@ type CartModalProps = {
 export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
   const { cart, updateCartItem } = useCart();
   const quantityRef = useRef(cart?.totalQuantity);
+  const items = cart?.lines ?? [];
 
   useEffect(() => {
     if (!cart) {
@@ -84,7 +85,7 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
                 </button>
               </div>
 
-              {!cart || cart.lines.length === 0 ? (
+              {items.length === 0 ? (
                 <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
                   <ShoppingCartIcon className="h-16" />
                   <p className="mt-6 text-center text-2xl font-bold">
@@ -94,7 +95,7 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
               ) : (
                 <div className="flex h-full flex-col justify-between overflow-hidden p-1">
                   <ul className="grow overflow-auto py-4">
-                    {cart.lines
+                    {items
                       .sort((a, b) =>
                         a.merchandise.product.title.localeCompare(
                           b.merchandise.product.title

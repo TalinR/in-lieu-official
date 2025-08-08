@@ -31,7 +31,13 @@ export async function addItem(
      */
     try {
       const newCart = await createCart();
-      (await cookies()).set('cartId', newCart.id!);
+      (await cookies()).set('cartId', newCart.id!, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 30 // 30 days
+      });
       await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
     } catch (err) {
       return 'Error adding item to cart';
@@ -116,5 +122,11 @@ export async function redirectToCheckout() {
 
 export async function createCartAndSetCookie() {
   let cart = await createCart();
-  (await cookies()).set('cartId', cart.id!);
+  (await cookies()).set('cartId', cart.id!, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 60 * 60 * 24 * 30
+  });
 }

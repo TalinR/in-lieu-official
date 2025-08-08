@@ -9,13 +9,28 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Helvetica Neue"', 'sans-serif'],
+        sans: [
+          '"Helvetica Neue"',
+          'Helvetica',
+          'Arial',
+          'ui-sans-serif',
+          'system-ui',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          '"Noto Sans"',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+          'sans-serif'
+        ],
       },
     },
   },
   plugins: [
-    // Add this plugin to easily create custom variants
-    function ({ addVariant }) {
+    // Add custom variants with typed plugin signature
+    function plugin({ addVariant }: { addVariant: (name: string, atRule: string) => void }) {
       addVariant('portrait', '@media (orientation: portrait)');
       addVariant('landscape', '@media (orientation: landscape)');
     },
