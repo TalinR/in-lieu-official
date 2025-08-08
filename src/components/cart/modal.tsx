@@ -114,7 +114,7 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
                         );
 
                         const merchandiseUrl = createUrl(
-                          `/product/${item.merchandise.product.handle}`,
+                          `/products/${item.merchandise.product.handle}`,
                           new URLSearchParams(merchandiseSearchParams)
                         );
 
