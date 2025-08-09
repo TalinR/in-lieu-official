@@ -83,8 +83,6 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
         purchasePanel={<PurchasePanel product={product} />}
       />
       <Info product={product} />
-      <Info product={product} />
-      <Info product={product} />
     </ProductProvider>
   );
 }
