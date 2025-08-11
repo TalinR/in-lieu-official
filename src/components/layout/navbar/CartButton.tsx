@@ -14,7 +14,7 @@ const CartButton = ({ onClick }: CartButtonProps) => {
   const quantity = cart?.totalQuantity || 0;
 
   return (
-    <div className="relative h-14 w-14">
+    <div className="relative h-13 w-13">
       <button
         onClick={onClick}
         aria-label="Open cart"

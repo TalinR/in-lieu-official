@@ -19,6 +19,15 @@ export type CartProduct = {
   featuredImage: Image;
 };
 
+
+// custom metafield type
+export type Metafield = {
+  type: string;
+  value: string | null;
+  reference?: unknown;
+};
+
+
 export type CartItem = {
   id: string | undefined;
   quantity: number;
@@ -133,6 +142,11 @@ export type ShopifyProduct = {
   seo: SEO;
   tags: string[];
   updatedAt: string;
+
+  // NEW (optional)
+  careInstructions?: Metafield;
+  longDescription?: Metafield;
+  sizeChart?: Metafield;
 };
 
 export type ShopifyCartOperation = {

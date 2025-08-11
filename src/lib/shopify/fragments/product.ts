@@ -56,6 +56,56 @@ const productFragment = /* GraphQL */ `
     }
     tags
     updatedAt
+
+    # NEW: per-product content
+    careInstructions: metafield(namespace: "custom", key: "care_instructions") {
+      type
+      value
+    }
+    longDescription: metafield(namespace: "custom", key: "long_description") {
+      type
+      value
+    }
+    sizeChart: metafield(namespace: "custom", key: "size_chart") {
+      type
+      value
+      reference {
+        # If you use a Metaobject-backed chart:
+        ... on Metaobject {
+          type
+          fields {
+            key
+            type
+            value
+            reference {
+              ... on MediaImage {
+                image {
+                  url
+                  altText
+                  width
+                  height
+                }
+              }
+              ... on GenericFile {
+                url
+              }
+            }
+          }
+        }
+        # If you use a File reference directly on the product:
+        ... on MediaImage {
+          image {
+            url
+            altText
+            width
+            height
+          }
+        }
+        ... on GenericFile {
+          url
+        }
+      }
+    }
   }
   ${imageFragment}
   ${seoFragment}
