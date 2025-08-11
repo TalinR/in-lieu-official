@@ -2,47 +2,38 @@
 
 import React from "react";
 
-export type Unit = "imperial" | "metric";
+export type Unit = "metric" | "imperial";
 
 export default function UnitToggle({
-  value,
+  unit,
   onChange
 }: {
-  value: Unit;
-  onChange: (next: Unit) => void;
+  unit: Unit;
+  onChange: (unit: Unit) => void;
 }) {
-  const options: Unit[] = ["imperial", "metric"];
+  const Button = ({ value, label }: { value: Unit; label: string }) => {
+    const selected = unit === value;
+    return (
+      <button
+        type="button"
+        aria-pressed={selected}
+        onClick={() => onChange(value)}
+        className={[
+          "h-11 px-5 rounded-lg border-[0.5px] transition-colors font-light",
+          selected
+            ? "bg-black text-white border-black"
+            : "bg-[#F5F5F5] text-neutral-800 border-[#E5E5E5] hover:bg-neutral-200"
+        ].join(" ")}
+      >
+        {label}
+      </button>
+    );
+  };
 
   return (
-    <div
-      role="radiogroup"
-      aria-label="units"
-      className="grid grid-cols-2 gap-3"
-    >
-      {options.map((opt) => {
-        const selected = value === opt;
-        return (
-          <button
-            key={opt}
-            type="button"
-            role="radio"
-            aria-checked={selected}
-            onClick={() => onChange(opt)}
-            className={[
-              "h-12 md:h-12 w-full",
-              "inline-flex items-center justify-center",
-              "rounded-xl border-[0.5px]",
-              "text-base lowercase font-light",
-              "transition-colors",
-              selected
-                ? "bg-black text-white border-black"
-                : "bg-[#F5F5F5] text-neutral-800 border-[#E5E5E5] hover:bg-neutral-200"
-            ].join(" ")}
-          >
-            <span className="-translate-y-[1px]">{opt}</span>
-          </button>
-        );
-      })}
+    <div className="flex gap-3" role="tablist" aria-label="units">
+      <Button value="imperial" label="imperial" />
+      <Button value="metric" label="metric" />
     </div>
   );
 }

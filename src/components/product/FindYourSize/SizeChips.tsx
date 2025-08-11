@@ -1,40 +1,37 @@
 "use client";
 
 import React from "react";
-import type { SizeKey } from "@/content/productContent";
 
 export default function SizeChips({
-  value,
-  onChange,
-  sizes = ["xs", "s", "m", "l", "xl"]
+  sizes,
+  selected,
+  onSelect
 }: {
-  value: SizeKey;
-  onChange: (next: SizeKey) => void;
-  sizes?: SizeKey[];
+  sizes: string[];
+  selected: string;
+  onSelect: (size: string) => void;
 }) {
   return (
-    <div role="radiogroup" aria-label="size" className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="size">
       {sizes.map((s) => {
-        const selected = value === s;
+        const isSelected = s === selected;
         return (
           <button
             key={s}
             type="button"
             role="radio"
-            aria-checked={selected}
-            onClick={() => onChange(s)}
+            aria-checked={isSelected}
+            onClick={() => onSelect(s)}
             className={[
-              "w-11 h-11",
-              "inline-flex items-center justify-center",
-              "rounded-lg border-[0.5px]",
-              "text-base lowercase font-light",
-              "transition-colors",
-              selected
+              "w-11 h-11 inline-flex items-center justify-center rounded-lg border-[0.5px] text-base lowercase transition-colors font-light",
+              isSelected
                 ? "bg-black text-white border-black"
                 : "bg-[#F5F5F5] text-neutral-800 border-[#E5E5E5] hover:bg-neutral-200"
             ].join(" ")}
           >
-            <span className="leading-none -translate-y-[1px]">{s}</span>
+            <span className="leading-none -translate-y-px md:-translate-y-[1px] inline-block">
+              {s}
+            </span>
           </button>
         );
       })}
