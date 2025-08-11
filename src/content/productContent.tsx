@@ -36,11 +36,11 @@ export const PRODUCT_CONTENT_BY_HANDLE: Record<string, ProductLocalContent> = {
       image: { src: "/images/size-charts/avril_size_chart.png", alt: "Avril size chart" },
       sizes: ["xs", "s", "m", "l", "xl"],
       measurements: [
-        { key: "shoulder", label: "Shoulder", position: { x: 50, y: 14, align: "center" } },
-        { key: "sleeve", label: "Sleeve", position: { x: 13, y: 50, align: "left" } },
-        { key: "chest", label: "Chest", position: { x: 50, y: 48, align: "center" } },
-        { key: "body", label: "Body", position: { x: 87, y: 50, align: "right" } },
-        { key: "hem", label: "Hem", position: { x: 50, y: 86, align: "center" } }
+        { key: "shoulder", label: "Shoulder", position: { x: 50, y: 7 } },
+        { key: "sleeve", label: "Sleeve", position: { x: 13, y: 64 } },
+        { key: "chest", label: "Chest", position: { x: 50, y: 60 } },
+        { key: "body", label: "Body", position: { x: 84, y: 64 } },
+        { key: "hem", label: "Hem", position: { x: 50, y: 93} }
       ],
       // Example placeholder values in centimeters; adjust per product
       values: {
