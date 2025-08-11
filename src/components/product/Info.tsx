@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { Product } from "@/lib/shopify/types";
 import { getLocalProductContent } from "@/content/productContent";
 import { RichText } from "@/lib/shopify/richtext";
+import FindYourSize from "@/components/product/FindYourSize/FindYourSize";
 
 
 type Section = {
@@ -30,7 +31,7 @@ export default function Info({ product }: { product: Product }) {
     {
       id: "find-your-size",
       title: "find your size",
-      content: <p>Size guide content placeholder.</p>
+      content: <FindYourSize guide={local?.sizeGuide} />
     },
     {
       id: "composition",
