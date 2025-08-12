@@ -1,13 +1,23 @@
 // src/components/ResponsiveSafeImage.jsx
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 
-const ResponsiveSafeImage = ({ src, alt, safeArea = { x: 0.3, y: 0.5 } }) => {
+interface ResponsiveSafeImageProps {
+  src: string;
+  alt: string;
+  safeArea?: { x: number; y: number };
+}
+
+const ResponsiveSafeImage = ({
+  src,
+  alt,
+  safeArea = { x: 0.3, y: 0.5 }
+}: ResponsiveSafeImageProps) => {
   // Refs for the container and the image elements
-  const containerRef = useRef(null);
-  const imageRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   // State to hold the calculated inline styles for the image
-  const [imageStyle, setImageStyle] = useState({
+  const [imageStyle, setImageStyle] = useState<React.CSSProperties>({
     opacity: 0, // Start hidden until dimensions are calculated
     transform: 'scale(1) translate(0px, 0px)',
   });
