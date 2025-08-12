@@ -5,6 +5,8 @@ import type { Product } from "@/lib/shopify/types";
 import SizeSelector from "./SizeSelector";
 import { AddToCart } from "@/components/cart/add-to-cart";
 
+const SIZE_GUIDE_SECTION_ID = 'find-your-size';
+
 export default function PurchasePanel({ product }: { product: Product }) {
 
   return (
@@ -14,27 +16,14 @@ export default function PurchasePanel({ product }: { product: Product }) {
         <button
           type="button"
           className="shrink-0 inline-flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-700"
+          aria-label="Open size guide"
           onClick={() => {
-            try {
-              // Validate that we can dispatch events
-              if (typeof window !== 'undefined' && window.dispatchEvent) {
-                // Dispatch custom event to open the section
-                const event = new CustomEvent('openSection', {
-                  detail: { sectionId: 'find-your-size' },
-                  bubbles: false,
-                  cancelable: false
-                });
-                
-                const dispatched = window.dispatchEvent(event);
-                if (!dispatched) {
-                  console.warn('[PurchasePanel] Size guide event was prevented');
-                }
-              } else {
-                console.error('[PurchasePanel] Cannot dispatch events - window not available');
-              }
-            } catch (error) {
-              console.error('[PurchasePanel] Error dispatching size guide event:', error);
-            }
+            // Dispatch custom event to open the section
+            window.dispatchEvent(
+              new CustomEvent('openSection', {
+                detail: { sectionId: SIZE_GUIDE_SECTION_ID }
+              })
+            );
           }}
         >
           <svg

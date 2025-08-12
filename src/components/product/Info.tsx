@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Product } from "@/lib/shopify/types";
@@ -19,7 +19,7 @@ export default function Info({ product }: { product: Product }) {
   const local = getLocalProductContent(product.handle);
   console.log(product.handle);
 
-  const sections: Section[] = useMemo(() => [
+  const sections: Section[] = [
     {
         id: "description",
         title: "description",
@@ -72,84 +72,51 @@ export default function Info({ product }: { product: Product }) {
       title: "delivery and returns",
       content: <p>Delivery & returns placeholder.</p>
     }
-  ], [product.longDescription?.value, local?.sizeGuide, local?.composition]);
+  ];
 
-  const [openSections, setOpenSections] = useState<Set<string>>(new Set());
-  const [instantOpenSections, setInstantOpenSections] = useState<Set<string>>(new Set());
+  const [sectionStates, setSectionStates] = useState<Map<string, { isOpen: boolean; shouldAnimate: boolean }>>(new Map());
+
+  // Helper to check if section is open
+  const isSectionOpen = (sectionId: string) => sectionStates.get(sectionId)?.isOpen ?? false;
   
-  // Refs for cleanup
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const lastEventTimeRef = useRef<number>(0);
+  // Helper to check if section should animate
+  const shouldSectionAnimate = (sectionId: string) => sectionStates.get(sectionId)?.shouldAnimate ?? true;
 
-  // Memoized valid section IDs
-  const validSectionIds = useCallback(() => new Set(sections.map(s => s.id)), [sections]);
-
-  // Clean up instant-open flags after animation completes
   useEffect(() => {
-    if (instantOpenSections.size > 0) {
-      const cleanupTimer = setTimeout(() => {
-        setInstantOpenSections(new Set());
-      }, 100);
-      return () => clearTimeout(cleanupTimer);
-    }
-  }, [openSections, instantOpenSections.size]);
+    let timeoutId: NodeJS.Timeout | null = null;
 
-  const handleOpenSection = useCallback((event: CustomEvent<{ sectionId: string }>) => {
-    try {
-      const { sectionId } = event.detail;
-      const now = Date.now();
+    const handleOpenSection = (event: CustomEvent<{ sectionId: string }>) => {
+      const sectionId = event.detail.sectionId;
       
-      // Debounce rapid events (prevent multiple calls within 100ms)
-      if (now - lastEventTimeRef.current < 100) {
-        return;
+      // Clear any existing timeout
+      if (timeoutId) {
+        clearTimeout(timeoutId);
       }
-      lastEventTimeRef.current = now;
+      
+      // Open section without animation
+      setSectionStates(prev => {
+        const newMap = new Map(prev);
+        newMap.set(sectionId, { isOpen: true, shouldAnimate: false });
+        return newMap;
+      });
 
-      // Validate section exists
-      if (!validSectionIds().has(sectionId)) {
-        console.warn(`[Info] Attempted to open non-existent section: ${sectionId}`);
-        return;
-      }
-
-      // Clear any pending scroll timeout
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = null;
-      }
-
-      // Mark as instant open
-      setInstantOpenSections((prev) => new Set(prev).add(sectionId));
-
-      // Open the section
-      setOpenSections((prev) => new Set(prev).add(sectionId));
-
-      // Schedule scroll with cleanup tracking
-      scrollTimeoutRef.current = setTimeout(() => {
+      // Scroll to section after a brief delay to ensure DOM is updated
+      timeoutId = setTimeout(() => {
         const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        } else {
-          console.warn(`[Info] Could not find element with ID: ${sectionId}`);
-        }
-        scrollTimeoutRef.current = null;
+        element?.scrollIntoView({ behavior: "smooth" });
+        timeoutId = null;
       }, 50);
-    } catch (error) {
-      console.error('[Info] Error handling openSection event:', error);
-    }
-  }, [validSectionIds]);
+    };
 
-  useEffect(() => {
     window.addEventListener('openSection', handleOpenSection as EventListener);
     
     return () => {
       window.removeEventListener('openSection', handleOpenSection as EventListener);
-      // Cleanup pending timeout on unmount
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = null;
+      if (timeoutId) {
+        clearTimeout(timeoutId);
       }
     };
-  }, [handleOpenSection]);
+  }, []);
 
   return (
     <section className="mx-auto max-w-5xl px-4 py-10">
@@ -158,53 +125,48 @@ export default function Info({ product }: { product: Product }) {
           <li key={s.id} id={s.id}>
             <motion.button
               className="flex w-full items-center justify-between py-4 text-left text-base font-light text-md"
-              aria-expanded={openSections.has(s.id)}
+              aria-expanded={isSectionOpen(s.id)}
               aria-controls={`${s.id}-panel`}
-              // whileHover={{ scale: 1.005 }}
               whileTap={{ scale: 0.995 }}
               transition={{ duration: 0.1 }}
               onClick={() => {
-                // Clear instant-open flag for manual clicks
-                setInstantOpenSections((prev) => {
-                  const newSet = new Set(prev);
-                  newSet.delete(s.id);
-                  return newSet;
-                });
-                
-                // Toggle section state
-                setOpenSections((prev) => {
-                  const newSet = new Set(prev);
-                  if (newSet.has(s.id)) {
-                    newSet.delete(s.id);
-                  } else {
-                    newSet.add(s.id);
-                  }
-                  return newSet;
+                setSectionStates(prev => {
+                  const newMap = new Map(prev);
+                  const currentState = newMap.get(s.id);
+                  const isCurrentlyOpen = currentState?.isOpen ?? false;
+                  
+                  // Toggle section with animation (manual clicks always animate)
+                  newMap.set(s.id, { 
+                    isOpen: !isCurrentlyOpen, 
+                    shouldAnimate: true 
+                  });
+                  
+                  return newMap;
                 });
               }}
             >
               <span className="">{s.title}</span>
               <motion.span 
                 className="text-xl"
-                animate={{ rotate: openSections.has(s.id) ? 45 : 0 }}
+                animate={{ rotate: isSectionOpen(s.id) ? 45 : 0 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               >
                 +
               </motion.span>
             </motion.button>
             <AnimatePresence initial={false}>
-              {openSections.has(s.id) && (
+              {isSectionOpen(s.id) && (
                 <motion.div
                   key={`${s.id}-panel`}
                   id={`${s.id}-panel`}
-                  initial={instantOpenSections.has(s.id) ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+                  initial={shouldSectionAnimate(s.id) ? { height: 0, opacity: 0 } : { height: "auto", opacity: 1 }}
                   animate={{ 
                     height: "auto", 
                     opacity: 1,
-                    transition: instantOpenSections.has(s.id) ? { duration: 0 } : {
+                    transition: shouldSectionAnimate(s.id) ? {
                       height: { duration: 0.3, ease: "easeOut" },
                       opacity: { duration: 0.2, delay: 0.1, ease: "easeOut" }
-                    }
+                    } : { duration: 0 }
                   }}
                   exit={{ 
                     height: 0, 
