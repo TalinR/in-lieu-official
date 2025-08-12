@@ -13,7 +13,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export async function addItem(
-  prevState: any,
+  _prevState: unknown,
   selectedVariantId: string | undefined
 ) {
   if (!selectedVariantId) {
@@ -23,7 +23,7 @@ export async function addItem(
   try {
     // Attempt to add to an existing cart first.
     await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
-  } catch (e) {
+  } catch {
     /**
      * The most common reason the previous call fails is because the user does
      * not have a `cartId` cookie yet (e.g. first-time add-to-cart). We create a
@@ -39,7 +39,7 @@ export async function addItem(
         maxAge: 60 * 60 * 24 * 30 // 30 days
       });
       await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
-    } catch (err) {
+    } catch {
       return 'Error adding item to cart';
     }
   }
@@ -48,7 +48,7 @@ export async function addItem(
   revalidateTag(TAGS.cart);
 }
 
-export async function removeItem(prevState: any, merchandiseId: string) {
+export async function removeItem(_prevState: unknown, merchandiseId: string) {
   try {
     const cart = await getCart();
 
@@ -66,13 +66,13 @@ export async function removeItem(prevState: any, merchandiseId: string) {
     } else {
       return 'Item not found in cart';
     }
-  } catch (e) {
+  } catch {
     return 'Error removing item from cart';
   }
 }
 
 export async function updateItemQuantity(
-  prevState: any,
+  _prevState: unknown,
   payload: {
     merchandiseId: string;
     quantity: number;
@@ -116,12 +116,12 @@ export async function updateItemQuantity(
 }
 
 export async function redirectToCheckout() {
-  let cart = await getCart();
+  const cart = await getCart();
   redirect(cart!.checkoutUrl);
 }
 
 export async function createCartAndSetCookie() {
-  let cart = await createCart();
+  const cart = await createCart();
   (await cookies()).set('cartId', cart.id!, {
     httpOnly: true,
     secure: true,
