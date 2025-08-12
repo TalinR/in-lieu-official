@@ -221,7 +221,7 @@ const SectionLinks = () => {
       aria-label="Page sections"
     >
       <div
-        className="absolute left-[-.7rem] w-[01px] bg-[#FFFFFF] transition-all duration-600 ease-out"
+        className="absolute left-[-.7rem] w-[1px] bg-[#FFFFFF] transition-all duration-500 ease-out"
         style={{
           bottom: indicatorState.bottom,
           height: indicatorState.height,

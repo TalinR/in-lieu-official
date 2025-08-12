@@ -31,7 +31,7 @@ const Navbar = () => {
 
   return (
     <>
-      <SectionLinksFramerMotion />
+      {/* <SectionLinksFramerMotion /> */}
 
       {/* Mobile: Bottom-right pill (existing behavior) */}
       <div className="fixed bottom-4 right-4 z-50 lg:hidden">
@@ -50,7 +50,7 @@ const Navbar = () => {
           <div className="flex flex-col items-center rounded-full bg-white/20 backdrop-blur-sm border border-white/20 px-7 py-3">
             <div className="flex flex-col items-start">
               <img src="/images/logo/black_logo.svg" alt="Logo" className="h-10 w-auto" />
-              <span className="text-md font-light">April 2025</span>
+              <span className="text-md font-light">August 2025</span>
             </div>
           </div>
         </div>

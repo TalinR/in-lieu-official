@@ -66,6 +66,20 @@ const productFragment = /* GraphQL */ `
       type
       value
     }
+    productCardPhoto: metafield(namespace: "custom", key: "product_card_photo") {
+      type
+      value
+            reference {                    # include this for file_reference image URLs
+        ... on MediaImage {
+          image {
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+    }
     sizeChart: metafield(namespace: "custom", key: "size_chart") {
       type
       value
