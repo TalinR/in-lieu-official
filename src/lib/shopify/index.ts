@@ -224,7 +224,11 @@ export async function createCart(): Promise<Cart> {
 export async function addToCart(
   lines: { merchandiseId: string; quantity: number }[]
 ): Promise<Cart> {
-  const cartId = (await cookies()).get('cartId')?.value!;
+  const cartIdCookie = (await cookies()).get('cartId');
+  if (!cartIdCookie?.value) {
+    throw new Error('Missing cartId');
+  }
+  const cartId = cartIdCookie.value;
   const res = await shopifyFetch<ShopifyAddToCartOperation>({
     query: addToCartMutation,
     variables: {
@@ -236,7 +240,11 @@ export async function addToCart(
 }
 
 export async function removeFromCart(lineIds: string[]): Promise<Cart> {
-  const cartId = (await cookies()).get('cartId')?.value!;
+  const cartIdCookie = (await cookies()).get('cartId');
+  if (!cartIdCookie?.value) {
+    throw new Error('Missing cartId');
+  }
+  const cartId = cartIdCookie.value;
   const res = await shopifyFetch<ShopifyRemoveFromCartOperation>({
     query: removeFromCartMutation,
     variables: {
@@ -251,7 +259,11 @@ export async function removeFromCart(lineIds: string[]): Promise<Cart> {
 export async function updateCart(
   lines: { id: string; merchandiseId: string; quantity: number }[]
 ): Promise<Cart> {
-  const cartId = (await cookies()).get('cartId')?.value!;
+  const cartIdCookie = (await cookies()).get('cartId');
+  if (!cartIdCookie?.value) {
+    throw new Error('Missing cartId');
+  }
+  const cartId = cartIdCookie.value;
   const res = await shopifyFetch<ShopifyUpdateCartOperation>({
     query: editCartItemsMutation,
     variables: {

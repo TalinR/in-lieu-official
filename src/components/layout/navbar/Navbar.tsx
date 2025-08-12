@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import CartButton from './CartButton';
 import MenuButton from './MenuButton';
 import MenuModal from '../menu/MenuModal';
-import SectionLinksFramerMotion from '../SectionLinksFramerMotion';
 import CartModal from '@/components/cart/modal';
 
 const Navbar = () => {
