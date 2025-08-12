@@ -19,7 +19,7 @@ export default function UnitToggle({
         aria-pressed={selected}
         onClick={() => onChange(value)}
         className={[
-          "h-11 px-5 rounded-lg border-[0.5px] transition-colors font-light",
+          "w-full h-11 px-5 rounded-lg border-[0.5px] transition-colors font-light",
           selected
             ? "bg-black text-white border-black"
             : "bg-[#F5F5F5] text-neutral-800 border-[#E5E5E5] hover:bg-neutral-200"
@@ -31,7 +31,7 @@ export default function UnitToggle({
   };
 
   return (
-    <div className="flex gap-3" role="tablist" aria-label="units">
+    <div className="grid grid-cols-2 gap-3 sm:flex sm:gap-3" role="tablist" aria-label="units">
       <Button value="imperial" label="imperial" />
       <Button value="metric" label="metric" />
     </div>

@@ -33,13 +33,36 @@ const Navbar = () => {
     <>
       <SectionLinksFramerMotion />
 
-      <div className="fixed bottom-4 right-4 z-50">
+      {/* Mobile: Bottom-right pill (existing behavior) */}
+      <div className="fixed bottom-4 right-4 z-50 lg:hidden">
+      {/* <div className="fixed bottom-4 right-4 z-50 lg:left-1/2 lg:right-auto lg:-translate-x-1/2"> */}
         <nav className="navbar-bg-glass flex w-full items-center gap-x-3 rounded-full p-2 shadow-lg">
           <div className="flex items-center gap-x-2">
             <CartButton onClick={toggleCart} />
             <MenuButton onClick={toggleMenu} />
           </div>
         </nav>
+      </div>
+
+      {/* Desktop: Top area with logo left, nav right */}
+      <div className="hidden lg:block">
+        <div className="fixed top-4 left-4 z-50">
+          <div className="flex flex-col items-center rounded-full bg-white/20 backdrop-blur-sm border border-white/20 px-7 py-3">
+            <div className="flex flex-col items-start">
+              <img src="/images/logo/black_logo.svg" alt="Logo" className="h-10 w-auto" />
+              <span className="text-md font-light">April 2025</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="fixed top-4 right-4 z-50">
+          <nav className="flex w-full items-center gap-x-3 rounded-full p-2 bg-white/20 backdrop-blur-md border border-white/20">
+            <div className="flex items-center gap-x-2">
+              <CartButton onClick={toggleCart} />
+              <MenuButton onClick={toggleMenu} />
+            </div>
+          </nav>
+        </div>
       </div>
 
       <CartModal isOpen={isCartOpen} onClose={closeCart} onOpen={openCart} />

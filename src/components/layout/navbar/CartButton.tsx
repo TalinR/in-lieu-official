@@ -31,8 +31,8 @@ const CartButton = ({ onClick }: CartButtonProps) => {
         <div
           className={clsx(
             'pointer-events-none absolute right-0 top-0 -mr-1 -mt-1 flex h-4 w-4 items-center justify-center rounded-full text-xs font-medium text-white',
-            'bg-[#FFFFFF17] backdrop-blur-sm',
-            'shadow-figma-button'
+            'bg-[#000000] backdrop-blur-sm',
+            // 'shadow-figma-button'
           )}
         >
           {quantity}

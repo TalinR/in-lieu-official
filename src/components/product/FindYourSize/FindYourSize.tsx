@@ -23,10 +23,10 @@ export default function FindYourSize({ guide }: { guide?: SizeGuide }) {
     <div className="flex flex-col gap-6">
       {/* Controls */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-4">
+        <div className="w-full sm:w-auto">
           <UnitToggle unit={unit} onChange={setUnit} />
         </div>
-        <div className="flex items-center gap-4">
+        <div className="w-full sm:w-auto">
           <SizeChips
             sizes={guide.sizes}
             selected={selectedSize || guide.sizes[0]}
@@ -39,12 +39,10 @@ export default function FindYourSize({ guide }: { guide?: SizeGuide }) {
       <MeasurementDiagram guide={guide} unit={unit} values={currentValues} />
 
       {/* Model notes */}
-      {guide.modelNotes && guide.modelNotes.length > 0 && (
-        <ul className="list-disc ml-5 space-y-1 text-sm font-light text-neutral-700">
-          {guide.modelNotes.map((note, idx) => (
-            <li key={idx}>{note}</li>
-          ))}
-        </ul>
+      {guide.modelNotes && (
+        <div className="text-md font-light text-neutral-800">
+          {guide.modelNotes}
+        </div>
       )}
     </div>
   );

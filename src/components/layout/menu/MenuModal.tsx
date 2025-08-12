@@ -124,7 +124,7 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
             <motion.div variants={item} className="landscape:mt-auto landscape:lg:mt-auto">
               <hr className="border-t border-gray-300 w-full landscape:hidden landscape:lg:hidden" />
               <div className="my-10 landscape:my-2 landscape:lg:my-0">
-                <SocialSelection />
+                <SocialSelection onLinkClick={onLinkClick} />
               </div>
             </motion.div>
           </motion.div>

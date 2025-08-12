@@ -12,7 +12,7 @@ export default function SizeChips({
   onSelect: (size: string) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="size">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(0,1fr))] gap-2 sm:flex sm:flex-wrap sm:gap-2" role="radiogroup" aria-label="size">
       {sizes.map((s) => {
         const isSelected = s === selected;
         return (
@@ -23,7 +23,7 @@ export default function SizeChips({
             aria-checked={isSelected}
             onClick={() => onSelect(s)}
             className={[
-              "w-11 h-11 inline-flex items-center justify-center rounded-lg border-[0.5px] text-base lowercase transition-colors font-light",
+              "w-full sm:w-11 h-11 inline-flex items-center justify-center rounded-lg border-[0.5px] text-base lowercase transition-colors font-light",
               isSelected
                 ? "bg-black text-white border-black"
                 : "bg-[#F5F5F5] text-neutral-800 border-[#E5E5E5] hover:bg-neutral-200"

@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-const SocialSelection = () => {
+interface SocialSelectionProps {
+  onLinkClick?: () => void;
+}
+
+const SocialSelection = ({ onLinkClick }: SocialSelectionProps) => {
   return (
     <div className="flex flex-col items-center space-y-4 landscape:md:flex-row landscape:md:justify-between landscape:md:items-center landscape:md:space-y-0">
       {/* Social Icons Section */}
@@ -44,6 +48,7 @@ const SocialSelection = () => {
       {/* Brand Logo Section */}
       <Link
         href="/"
+        onClick={onLinkClick}
         className="transition-opacity duration-200 hover:opacity-75"
         aria-label="Go to homepage"
       >

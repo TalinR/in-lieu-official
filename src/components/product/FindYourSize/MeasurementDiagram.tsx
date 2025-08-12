@@ -51,8 +51,8 @@ export default function MeasurementDiagram({ guide, unit, values }: Props) {
               ].join(" ")}
               style={{ left: `${m.position.x}%`, top: `${m.position.y}%` }}
             >
-              <span className="text-neutral-600 font-light text-lg">{m.label}</span>
-              <span className="text-neutral-600 text-lg mt-[-5px]">
+              <span className="text-neutral-600 font-light text-md">{m.label}</span>
+              <span className="text-neutral-600 text-md mt-[-5px]">
                 {convertAndFormat(displayValue, unit)}
               </span>
             </div>

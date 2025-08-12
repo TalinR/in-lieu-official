@@ -2,18 +2,10 @@
 
 import React from "react";
 import type { Product } from "@/lib/shopify/types";
-import { useProduct } from "@/components/product/product-context";
 import SizeSelector from "./SizeSelector";
 import { AddToCart } from "@/components/cart/add-to-cart";
-import Price from "@/components/price";
 
 export default function PurchasePanel({ product }: { product: Product }) {
-  const { state } = useProduct();
-
-  const selected = product.variants.find((v) =>
-    v.selectedOptions.every((o) => state[o.name.toLowerCase()] === o.value)
-  );
-  const price = selected?.price ?? product.priceRange.minVariantPrice;
 
   return (
     <div className="space-y-6">
@@ -22,11 +14,28 @@ export default function PurchasePanel({ product }: { product: Product }) {
         <button
           type="button"
           className="shrink-0 inline-flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-700"
-          onClick={() =>
-            document
-              .getElementById("find-your-size")
-              ?.scrollIntoView({ behavior: "smooth" })
-          }
+          onClick={() => {
+            try {
+              // Validate that we can dispatch events
+              if (typeof window !== 'undefined' && window.dispatchEvent) {
+                // Dispatch custom event to open the section
+                const event = new CustomEvent('openSection', {
+                  detail: { sectionId: 'find-your-size' },
+                  bubbles: false,
+                  cancelable: false
+                });
+                
+                const dispatched = window.dispatchEvent(event);
+                if (!dispatched) {
+                  console.warn('[PurchasePanel] Size guide event was prevented');
+                }
+              } else {
+                console.error('[PurchasePanel] Cannot dispatch events - window not available');
+              }
+            } catch (error) {
+              console.error('[PurchasePanel] Error dispatching size guide event:', error);
+            }
+          }}
         >
           <svg
             aria-hidden="true"
