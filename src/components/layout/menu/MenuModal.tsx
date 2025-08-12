@@ -7,9 +7,10 @@ import SocialSelection from './SocialSelection';
 import { usePathname } from 'next/navigation';
 import { useSections } from '../SectionsContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 
 // ------------------  animation definitions  ------------------
-const container = {
+const container: Variants = {
   hidden: {},
   show: {
     transition: {           // children fire in sequence
@@ -22,9 +23,9 @@ const container = {
   }
 };
 
-const item = {               // re-use everywhere
+const item: Variants = {               // re-use everywhere
   hidden: { opacity: 0, y: 30 },
-  show:  { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+  show:  { opacity: 1, y: 0, transition: { duration: 0.5, ease: [1, 1, 1, 1] } },
   exit:  { opacity: 0, y: 20, transition: { duration: 0.2 } }
 };
 // -------------------------------------------------------------
