@@ -4,7 +4,20 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 import clsx from 'clsx';
+
+const linkVariants = {
+  hidden: { opacity: 0, x: 20 },
+  show: { 
+    opacity: 1, 
+    x: 0, 
+    transition: { 
+      duration: 0.4, 
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number]
+    } 
+  }
+};
 
 type LinkItem = { label: string; href: string };
 type Group = { heading?: string; links: LinkItem[] };
@@ -23,18 +36,21 @@ export default function NavLinks({ groups, onNavigate, variant = 'mobile' }: Pro
   return (
     <div className="flex flex-col space-y-8">
       {groups.map((g, i) => (
-        <div key={i} className="flex flex-col">
+        <motion.div key={i} className="flex flex-col" variants={linkVariants}>
           {g.heading && (
-            <span className="mb-2 text-xs font-light tracking-wide text-neutral-600">
+            <motion.span 
+              className="mb-2 text-xs font-light tracking-wide text-neutral-600"
+              variants={linkVariants}
+            >
               {g.heading}
-            </span>
+            </motion.span>
           )}
           <ul className={clsx('flex flex-col', gapY)}>
             {g.links.map((l) => {
               const isActive =
                 pathname === l.href || pathname.startsWith(l.href + '/');
               return (
-                <li key={l.href}>
+                <motion.li key={l.href} variants={linkVariants}>
                   <Link
                     href={l.href}
                     onClick={onNavigate}
@@ -47,11 +63,11 @@ export default function NavLinks({ groups, onNavigate, variant = 'mobile' }: Pro
                   >
                     {l.label}
                   </Link>
-                </li>
+                </motion.li>
               );
             })}
           </ul>
-        </div>
+        </motion.div>
       ))}
     </div>
   );
