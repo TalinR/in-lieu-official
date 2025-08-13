@@ -112,7 +112,7 @@ const ResponsiveSafeImage = ({
   }, [calculateStyle]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-full overflow-hidden">
+    <div ref={containerRef} className="relative w-full h-full overflow-hidden rounded-3xl">
       <img
         ref={imageRef}
         src={src}

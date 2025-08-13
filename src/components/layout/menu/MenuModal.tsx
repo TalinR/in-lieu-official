@@ -45,15 +45,20 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
   // Sample page data
   const pages = [
     { 
-      name: "collection", 
-      description: "makurro game, lookbook and about the collection", 
+      name: "home", 
+      description: "lookbook and about the collection", 
       href: "/" 
-    },
-    { 
-      name: "delivery and returns", 
-      description: "all the boring stuff that you dont care about", 
-      href: "/delivery" 
-    }
+      },
+      { 
+        name: "avril", 
+        description: "experience the all new alpacca avery", 
+        href: "/products/avril" 
+      },
+      { 
+        name: "lyon", 
+        description: "bringing back a classic", 
+        href: "/products/lyon" 
+      }
   ];
 
   // Define menu-specific sections
@@ -104,7 +109,7 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
           <motion.div variants={item} className="flex-1 landscape:lg:w-3/5">
             <ResponsiveSafeImage
               src="/images/test_image.png"
-              alt="A beautiful landscape"
+              alt="In lieu official"
               imageClassName="transition-opacity"
             />
           </motion.div>
@@ -117,7 +122,7 @@ const MenuModal = ({ isOpen, onLinkClick }: MenuModalProps) => {
                                                       landscape:lg:w-2/5 landscape:lg:pl-10">
             {/* Links
             Animation: */}
-            <motion.div variants={item} className="my-10 landscape:my-2 landscape:lg:my-2">
+            <motion.div variants={item} className="my-10 landscape:my-2 landscape:lg:my-3">
               <PageLinks pages={pages} currentPath={currentPath} onLinkClick={onLinkClick} />
             </motion.div>
 

@@ -14,7 +14,7 @@ const CartButton = ({ onClick }: CartButtonProps) => {
   const quantity = cart?.totalQuantity || 0;
 
   return (
-    <div className="relative h-13 w-13">
+    <div className="relative h-13 w-13 lg:h-11 lg:w-11">
       <button
         onClick={onClick}
         aria-label="Open cart"
@@ -24,7 +24,7 @@ const CartButton = ({ onClick }: CartButtonProps) => {
           'shadow-figma-button',
         )}
       >
-        <ShoppingBagIcon className="h-8 w-8" />
+        <ShoppingBagIcon className="h-8 w-8 lg:h-6 lg:w-6" />
       </button>
 
       {quantity > 0 && (

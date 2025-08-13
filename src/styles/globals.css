@@ -18,9 +18,9 @@
   }
 } */
 
-@media (min-width: 1024px) { /* lg breakpoint */
+@media (min-width: 1024px) { 
   html {
-    font-size: 22px; /* 12.5% larger on lg+ screens */
+    font-size: 20px; 
   }
 }
 

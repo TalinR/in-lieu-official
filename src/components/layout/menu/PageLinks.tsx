@@ -14,7 +14,7 @@ interface PageLinksProps {
 
 const PageLinks = ({ pages, currentPath, onLinkClick }: PageLinksProps) => {
   return (
-    <div className="space-y-6 lg:space-y-8">
+    <div className="space-y-4 lg:space-y-8">
       {pages.map((page) => {
         const isActive = currentPath === page.href;
         
@@ -29,7 +29,7 @@ const PageLinks = ({ pages, currentPath, onLinkClick }: PageLinksProps) => {
           >
             <div className="text-center landscape:text-left">
               <h3
-                className={`text-sm font-regular transition-colors duration-200 lg:text-xl ${
+                className={`text-sm font-regular transition-colors duration-200 lg:text-lg ${
                   isActive 
                     ? 'text-[#635BFF]' 
                     : 'text-gray-800 font-light'
@@ -38,9 +38,9 @@ const PageLinks = ({ pages, currentPath, onLinkClick }: PageLinksProps) => {
                 {page.name}
               </h3>
               <p
-                className={`text-sm transition-colors duration-200 lg:text-xl ${
+                className={`text-sm font-light transition-colors duration-200 lg:text-lg ${
                   isActive 
-                    ? 'text-black' 
+                    ? 'text-black font-regular' 
                     : 'text-[#5A5A5A]'
                 }`}
               >

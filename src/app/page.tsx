@@ -32,9 +32,9 @@ export default async function HomePage() {
         src="/images/home/hero_image.png" 
         alt="Makkuro Collection Hero"
       />
-      <p className="px-4 pb-12 lg:pb-16 w-full max-w-2xl mx-auto text-lg font-light text-black leading-relaxed tracking-[-0.02em] text-center">
-      the makkuro collection is like the calm within a world that moves way too fast. Welcome and enjoy it. Yes this is just some random text so I can easily see how this looks on the website.
-      </p>
+      {/* <p className="px-4 pb-12 lg:pb-16 w-full max-w-2xl mx-auto text-md font-light text-black leading-relaxed tracking-[-0.02em] text-center">
+      the makkuro collection is like the calm within a world that moves way too fast. Welcome and enjoy it.
+      </p> */}
       <section className="grid grid-cols-1 gap-6 md:grid-cols-2 w-full px-4 pb-12">
         {avril && avrilImg && (
           <ProductCard
