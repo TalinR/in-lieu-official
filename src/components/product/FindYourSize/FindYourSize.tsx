@@ -8,7 +8,7 @@ import MeasurementDiagram from "./MeasurementDiagram";
 
 export default function FindYourSize({ guide }: { guide?: SizeGuide }) {
   const [unit, setUnit] = useState<Unit>("metric");
-  const [selectedSize, setSelectedSize] = useState<string>(() => guide?.sizes?.[0] ?? "");
+  const [selectedSize, setSelectedSize] = useState<string>(() => guide?.sizes?.[2] ?? "");
 
   const currentValues = useMemo(() => {
     if (!guide || !selectedSize) return undefined;

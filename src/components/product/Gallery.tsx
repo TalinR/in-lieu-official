@@ -11,7 +11,7 @@ export default function Gallery({ product }: { product: Product }) {
   return (
     <div>
       {/* Mobile: single image aspect container (swipe behavior may be added outside). */}
-      <div className="relative overflow-hidden rounded-3xl bg-neutral-100 aspect-[2/2.22] lg:hidden">
+      <div className="relative overflow-hidden rounded-3xl bg-[#EDEDED] aspect-[2/2.32] lg:hidden">
         {featured ? (
           <Image
             src={featured.url}

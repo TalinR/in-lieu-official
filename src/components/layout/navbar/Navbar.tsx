@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import CartButton from './CartButton';
 import MenuButton from './MenuButton';
+import HomeButton from './HomeButton';
 import MenuModal from '../menu-v2/MenuModal';
 import CartModal from '@/components/cart/modal';
 import Image from 'next/image';
@@ -12,10 +13,21 @@ const Navbar = () => {
   const [isCartOpen, setCartOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const toggleCart = () => setCartOpen(!isCartOpen);
-  const openCart = () => setCartOpen(true);
+  const toggleCart = () => {
+    if (!isCartOpen) {
+      setMenuOpen(false); // Close menu when opening cart
+    }
+    setCartOpen(!isCartOpen);
+  };
+  const openCart = () => {
+    setMenuOpen(false); // Close menu when opening cart
+    setCartOpen(true);
+  };
   const closeCart = () => setCartOpen(false);
   const toggleMenu = () => {
+    if (!isMenuOpen) {
+      setCartOpen(false); // Close cart when opening menu
+    }
     setMenuOpen(!isMenuOpen);
   };
 
@@ -39,6 +51,7 @@ const Navbar = () => {
       {/* <div className="fixed bottom-4 right-4 z-50 lg:left-1/2 lg:right-auto lg:-translate-x-1/2"> */}
         <nav className="navbar-bg-glass flex w-full items-center gap-x-3 rounded-full p-2 shadow-lg">
           <div className="flex items-center gap-x-2">
+            <HomeButton />
             <CartButton onClick={toggleCart} />
             <MenuButton onClick={toggleMenu} />
           </div>

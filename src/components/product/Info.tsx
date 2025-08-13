@@ -42,7 +42,12 @@ export default function Info({ product }: { product: Product }) {
       id: "composition",
       title: "composition",
       content: local?.composition ? (
-        <div className="grid grid-cols-4 gap-10 text-center px-4">
+        <div 
+          className="grid gap-10 text-center px-4"
+          style={{
+            gridTemplateColumns: `repeat(${local.composition.length}, 1fr)`
+          }}
+        >
           {local.composition.map((item, i) => (
             <div key={i} className="flex flex-col items-center">
               <Image
@@ -65,7 +70,11 @@ export default function Info({ product }: { product: Product }) {
     {
       id: "care-instructions",
       title: "care instructions",
-      content: <p>Care instructions placeholder.</p>
+      content: product.careInstructions?.value ? (
+        <RichText value={product.careInstructions.value} />
+    ) : (
+      <p className="text-sm text-neutral-600">—</p>
+    )
     },
     {
       id: "delivery-and-returns",

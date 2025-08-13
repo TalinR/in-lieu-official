@@ -39,7 +39,7 @@ export default function NavLinks({ groups, onNavigate, variant = 'mobile' }: Pro
         <motion.div key={i} className="flex flex-col" variants={linkVariants}>
           {g.heading && (
             <motion.span 
-              className="mb-2 text-xs font-light tracking-wide text-neutral-600"
+              className="mb-2 text-xs lg:text-sm font-light tracking-wide text-neutral-600"
               variants={linkVariants}
             >
               {g.heading}

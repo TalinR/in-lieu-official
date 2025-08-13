@@ -66,7 +66,7 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
             leaveFrom="opacity-100 backdrop-blur-[.5px]"
             leaveTo="opacity-0 backdrop-blur-none"
           >
-            <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+            <div className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col p-6 text-black backdrop-blur-xl" aria-hidden="true" />
           </Transition.Child>
           <Transition.Child
             as={Fragment}
@@ -77,9 +77,14 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
+            <Dialog.Panel 
+              className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col p-6 text-black backdrop-blur-xl md:w-[390px]"
+              style={{
+                background: 'linear-gradient(to left, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 0.3) 300px, rgba(255, 255, 255, 0.3) 100%)'
+              }}
+            >
               <div className="flex items-center justify-between">
-                <p className="text-lg font-semibold">My Cart</p>
+                <p className="text-xl font-light">Bag</p>
                 <button aria-label="Close cart" onClick={onClose}>
                   <CloseCart />
                 </button>
@@ -88,8 +93,8 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
               {items.length === 0 ? (
                 <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
                   <ShoppingCartIcon className="h-16" />
-                  <p className="mt-6 text-center text-2xl font-bold">
-                    Your cart is empty.
+                  <p className="mt-6 text-center text-xl font-regular">
+                    Your bag is empty.
                   </p>
                 </div>
               ) : (
@@ -122,7 +127,7 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
                         return (
                           <li
                             key={i}
-                            className="flex w-full flex-col border-b border-neutral-300 dark:border-neutral-700"
+                            className="flex w-full flex-col border-b border-neutral-300"
                           >
                             <div className="relative flex w-full flex-row justify-between px-1 py-4">
                               <div className="absolute z-40 -ml-1 -mt-2">
@@ -132,7 +137,7 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
                                   />
                               </div>
                               <div className="flex flex-row">
-                                <div className="relative h-16 w-16 overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800">
+                                <div className="relative h-16 w-16 overflow-hidden rounded-md border border-neutral-300 bg-neutral-300">
                                   <Image
                                     className="h-full w-full object-cover"
                                     width={64}
@@ -153,12 +158,12 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
                                   className="z-30 ml-2 flex flex-row space-x-4"
                                 >
                                   <div className="flex flex-1 flex-col text-base">
-                                    <span className="leading-tight">
+                                    <span className="leading-tight font-light">
                                       {item.merchandise.product.title}
                                     </span>
                                     {item.merchandise.title !==
                                     DEFAULT_OPTION ? (
-                                      <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                                      <p className="text-sm font-light text-neutral-500">
                                         {item.merchandise.title}
                                       </p>
                                     ) : null}
@@ -167,13 +172,13 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
                               </div>
                               <div className="flex h-16 flex-col justify-between">
                                 <Price
-                                  className="flex justify-end space-y-2 text-right text-sm"
+                                  className="flex justify-end space-y-2 text-right font-light text-sm"
                                   amount={item.cost.totalAmount.amount}
                                   currencyCode={
                                     item.cost.totalAmount.currencyCode
                                   }
                                 />
-                                <div className="ml-auto flex h-9 flex-row items-center rounded-full border border-neutral-200 dark:border-neutral-700">
+                                <div className="ml-auto flex h-9 flex-row items-center rounded-full border border-neutral-200">
                                   <EditItemQuantityButton
                                     item={item}
                                     type="minus"
@@ -196,29 +201,29 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
                         );
                       })}
                   </ul>
-                  <div className="py-4 text-sm text-neutral-500 dark:text-neutral-400">
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
+                  <div className="py-4 text-sm text-neutral-500">
+                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1">
                       <p>Taxes</p>
                       <Price
-                        className="text-right text-base text-black dark:text-white"
+                        className="text-right text-base text-black font-light"
                         amount={cart?.cost.totalTaxAmount.amount ?? '0'}
                         currencyCode={cart?.cost.totalTaxAmount.currencyCode ?? 'AUD'}
                       />
                     </div>
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
+                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1">
                       <p>Shipping</p>
-                      <p className="text-right">Calculated at checkout</p>
+                      <p className="text-right font-light">Calculated at checkout</p>
                     </div>
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
+                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1">
                       <p>Total</p>
                       <Price
-                        className="text-right text-base text-black dark:text-white"
+                        className="text-right text-base text-black"
                         amount={cart?.cost.totalAmount.amount ?? '0'}
                         currencyCode={cart?.cost.totalAmount.currencyCode ?? 'AUD'}
                       />
                     </div>
                   </div>
-                  <form action={redirectToCheckout}>
+                  <form action={redirectToCheckout} className="pb-20 lg:pb-0">
                     <CheckoutButton />
                   </form>
                 </div>
@@ -233,7 +238,7 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
 
 function CloseCart({ className }: { className?: string }) {
   return (
-    <div className="relative flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white">
+    <div className="relative flex h-11 w-11 items-center justify-center rounded-md text-black transition-colors">
       <XMarkIcon
         className={clsx(
           'h-6 transition-all ease-in-out hover:scale-110',
