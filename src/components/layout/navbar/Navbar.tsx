@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import CartButton from './CartButton';
 import MenuButton from './MenuButton';
 import MenuModal from '../menu-v2/MenuModal';
 import CartModal from '@/components/cart/modal';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isCartOpen, setCartOpen] = useState(false);
@@ -46,13 +48,15 @@ const Navbar = () => {
       {/* Desktop: Top area with logo left, nav right */}
       <div className="hidden lg:block">
         <div className="fixed top-4 left-4 z-40">
-          <div className="flex flex-col items-center rounded-4xl bg-white/20 backdrop-blur-sm border border-white/20 px-4 py-2">
-          {/* <div className="flex flex-col items-center rounded-full px-7 py-3"> */}
-            <div className="flex flex-col items-start">
-              <img src="/images/logo/black_logo.svg" alt="Logo" className="h-8 w-auto" />
-              <span className="text-md font-light">August 2025</span>
+          <Link href="/" className="block">
+            <div className="flex flex-col items-center rounded-4xl bg-white/20 backdrop-blur-sm border border-white/20 px-4 py-2 transition-opacity hover:opacity-80 cursor-pointer">
+            {/* <div className="flex flex-col items-center rounded-full px-7 py-3"> */}
+              <div className="flex flex-col items-start">
+                <Image src="/images/logo/black_logo.svg" alt="Logo" width={32} height={32} className="h-8 w-auto" />
+                <span className="text-md font-light">August 2025</span>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
         
         <div className="fixed top-4 right-4 z-60">

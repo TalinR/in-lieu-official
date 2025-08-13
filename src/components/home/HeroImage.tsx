@@ -13,7 +13,7 @@ const HeroImage = ({
   alt 
 }: HeroImageProps) => {
   return (
-    <div className="px-4 pb-8 lg:pb-12 lg:pt-3 w-full max-w-xl mx-auto">
+    <div className="px-4 pb-8 lg:pb-12 lg:pt-3 w-full lg:w-1/3 mx-auto">
       <div className="relative overflow-hidden aspect-[4/5] lg:aspect-[3/4]">
         <Image
           src={src}
