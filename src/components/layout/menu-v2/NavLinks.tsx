@@ -30,7 +30,7 @@ type Props = {
 
 export default function NavLinks({ groups, onNavigate, variant = 'mobile' }: Props) {
   const pathname = usePathname();
-  const size = variant === 'desktop' ? 'text-3xl' : 'text-2xl';
+  const size = variant === 'desktop' ? 'text-2xl' : 'text-2xl';
   const gapY = variant === 'desktop' ? 'space-y-2' : 'space-y-1';
 
   return (

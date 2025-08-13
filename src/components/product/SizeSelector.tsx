@@ -2,11 +2,10 @@
 
 import React from "react";
 import type { Product } from "@/lib/shopify/types";
-import { useProduct, useUpdateURL } from "@/components/product/product-context";
+import { useProduct } from "@/components/product/product-context";
 
 export default function SizeSelector({ product }: { product: Product }) {
   const { state, updateOption } = useProduct();
-  const updateURL = useUpdateURL();
 
   const sizeOpt = product.options.find(
     (o) => o.name.toLowerCase() === "size"
@@ -35,8 +34,7 @@ export default function SizeSelector({ product }: { product: Product }) {
             aria-disabled={disabled}
             disabled={disabled}
             onClick={() => {
-              const next = updateOption("size", v);
-              updateURL(next);
+              updateOption("size", v);
             }}
             className={
               [
