@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --swiper-pagination-color: #4B5563; /* Tailwind gray-600 */
 }
 
 @theme inline {
