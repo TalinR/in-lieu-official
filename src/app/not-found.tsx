@@ -11,7 +11,7 @@ export default function NotFound() {
         priority
       />
       <p className="text-lg text-gray-600">
-        Sorry this page doesn't exist
+        Sorry this page doesn&apos;t exist
       </p>
     </main>
   );
