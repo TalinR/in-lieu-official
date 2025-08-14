@@ -66,7 +66,7 @@ const Navbar = () => {
             {/* <div className="flex flex-col items-center rounded-full px-7 py-3"> */}
               <div className="flex flex-col items-start">
                 <Image src="/images/logo/black_logo.svg" alt="Logo" width={32} height={32} className="h-8 w-auto" />
-                <span className="text-md font-light">August 2025</span>
+                <span className="text-md font-light">Makkuro Early Access</span>
               </div>
             </div>
           </Link>
