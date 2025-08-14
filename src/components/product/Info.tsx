@@ -15,9 +15,27 @@ type Section = {
   content: React.ReactNode;
 };
 
+
+
+
+
 export default function Info({ product }: { product: Product }) {
   const local = getLocalProductContent(product.handle);
   console.log(product.handle);
+
+  // Pull measurement values (cm) from Shopify JSON metafield
+  const json = product.sizeChartValues?.value;
+  let remoteValues: Record<string, Record<string, number>> | undefined;
+  try {
+    remoteValues = json ? JSON.parse(json) : undefined;
+  } catch {
+    remoteValues = undefined;
+  }
+
+  // Merge: use Shopify values if present; keep local diagram config
+  const guide = local?.sizeGuide
+    ? { ...local.sizeGuide, values: remoteValues ?? local.sizeGuide.values }
+    : undefined;
 
   const sections: Section[] = [
     {
@@ -33,7 +51,7 @@ export default function Info({ product }: { product: Product }) {
       id: "find-your-size",
       title: "find your size",
       content: local?.sizeGuide ? (
-        <FindYourSize guide={local.sizeGuide} />
+        <FindYourSize guide={guide} />
       ) : (
         <p className="text-sm text-neutral-600">—</p>
       )

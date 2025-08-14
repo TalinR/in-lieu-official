@@ -120,6 +120,11 @@ const productFragment = /* GraphQL */ `
         }
       }
     }
+    # measurement values (JSON, cm)
+    sizeChartValues: metafield(namespace: "custom", key: "size_chart_values") {
+      type
+      value
+    }
   }
   ${imageFragment}
   ${seoFragment}

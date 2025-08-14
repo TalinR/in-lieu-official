@@ -148,6 +148,7 @@ export type ShopifyProduct = {
   longDescription?: Metafield;
   sizeChart?: Metafield;
   productCardPhoto?: Metafield;
+  sizeChartValues?: Metafield;
 };
 
 export type ShopifyCartOperation = {
