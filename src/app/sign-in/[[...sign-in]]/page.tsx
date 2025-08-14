@@ -27,6 +27,11 @@ export default function Page() {
                   display: "none",
                 }, 
             }, 
+            headerTitle: {
+              fontSize: "24px",
+              fontWeight: "300",
+            },
+            
             // header: {
             //     display: "none",
             //   },
