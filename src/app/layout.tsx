@@ -4,6 +4,14 @@ import Navbar from '@/components/layout/navbar/Navbar';
 import { SectionsProvider } from '@/components/layout/SectionsContext';
 import { CartProvider } from '@/components/cart/cart-context';
 import { getCart } from '@/lib/shopify';
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
 
 export const metadata: Metadata = {
   title: 'In Lieu',
@@ -19,6 +27,7 @@ export default function RootLayout({
   const cart = getCart();
 
   return (
+    <ClerkProvider>
     <html lang="en">
       <body className="font-sans antialiased">
         <CartProvider cartPromise={cart}>
@@ -29,5 +38,6 @@ export default function RootLayout({
         </CartProvider>
       </body>
     </html>
+    </ClerkProvider>
   );
 }
