@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Navbar from '@/components/layout/navbar/Navbar';
-import { SectionsProvider } from '@/components/layout/SectionsContext';
 import { CartProvider } from '@/components/cart/cart-context';
 import { getCart } from '@/lib/shopify';
 import {
@@ -31,10 +30,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-sans antialiased">
         <CartProvider cartPromise={cart}>
-          <SectionsProvider>
             <Navbar />
             {children}
-          </SectionsProvider>
         </CartProvider>
       </body>
     </html>
