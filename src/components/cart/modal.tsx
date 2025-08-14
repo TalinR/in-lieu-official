@@ -85,7 +85,7 @@ export default function CartModal({ isOpen, onClose, onOpen }: CartModalProps) {
             >
               <div className="flex items-center justify-between">
                 <p className="text-xl font-light">Bag</p>
-                <button aria-label="Close cart" onClick={onClose}>
+                <button aria-label="Close cart" onClick={onClose} className="lg:hidden">
                   <CloseCart />
                 </button>
               </div>

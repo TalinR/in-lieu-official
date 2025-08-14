@@ -8,8 +8,8 @@ import {
 } from '@clerk/nextjs'
 
 export const metadata: Metadata = {
-  title: 'In Lieu',
-  description: 'Apparel & Accessories',
+  title: 'In Lieu Official',
+  description: 'In Lieu Official - Sydney Based Clothing Brand',
 };
 
 export default function RootLayout({

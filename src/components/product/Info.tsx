@@ -21,7 +21,6 @@ type Section = {
 
 export default function Info({ product }: { product: Product }) {
   const local = getLocalProductContent(product.handle);
-  console.log(product.handle);
 
   // Pull measurement values (cm) from Shopify JSON metafield
   const json = product.sizeChartValues?.value;

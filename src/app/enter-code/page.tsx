@@ -4,6 +4,7 @@ import { useClerk, useUser } from '@clerk/nextjs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function EnterCodePage() {
   const [error, setError] = useState<string | null>(null);
@@ -91,7 +92,7 @@ export default function EnterCodePage() {
         {/* Mobile: top-left, Desktop: center */}
         <div className="w-full max-w-md p-10 lg:mx-auto lg:p-0 lg:flex lg:items-center lg:justify-center lg:min-h-screen">
           <div className="lg:text-center">
-            <h1 className="text-l font-light mb-2">Welcome, Talin</h1>
+            <h1 className="text-l font-light mb-2">Welcome, {user?.firstName}</h1>
             <p className="text-l font-light mb-5">Please enter your presale code</p>
 
             <form onSubmit={onSubmit} className="space-y-3">
@@ -112,7 +113,16 @@ export default function EnterCodePage() {
                 </button>
               </div>
 
-              {error && <p className="text-gray-600 text-sm font-normal pl-1 lg:pl-0">{error}</p>}
+              {loading && (
+                <motion.p 
+                  className="text-gray-600 text-sm font-normal pl-1 lg:pl-0"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  please wait
+                </motion.p>
+              )}
+              {error && !loading && <p className="text-gray-600 text-sm font-normal pl-1 lg:pl-0">{error}</p>}
             </form>
           </div>
         </div>

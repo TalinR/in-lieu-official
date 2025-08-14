@@ -50,8 +50,6 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
   const params = await props.params;
   const product = await getProduct(params.handle);
 
-  console.log(product);
-
   if (!product) return notFound();
 
   const productJsonLd = {
