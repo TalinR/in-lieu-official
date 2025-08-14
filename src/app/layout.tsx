@@ -5,11 +5,6 @@ import { CartProvider } from '@/components/cart/cart-context';
 import { getCart } from '@/lib/shopify';
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
 } from '@clerk/nextjs'
 
 export const metadata: Metadata = {
