@@ -1,7 +1,7 @@
 // src/components/layout/menu-v2/MenuModal.tsx
 'use client';
 
-import { useClerk } from '@clerk/nextjs';
+import { useClerk, useUser } from '@clerk/nextjs';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
@@ -61,6 +61,7 @@ type ViewType = 'main' | 'account';
 export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
   const [currentView, setCurrentView] = useState<ViewType>('main');
   const { signOut } = useClerk();
+  const { user } = useUser();
 
   const handleDeleteAccount = async () => {
     const confirmed = window.confirm('This will permanently delete your account. This action cannot be undone. Continue?');
@@ -165,6 +166,17 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                     ← back
                   </motion.button>
                 )}
+                {currentView === 'account' && (
+                  <motion.div
+                    className="mb-6 text-2xl font-light text-neutral-600 leading-none"
+                    variants={{
+                      hidden: { opacity: 0, x: 20 },
+                      show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.1 } }
+                    }}
+                  >
+                    Welcome, {user?.firstName}
+                  </motion.div>
+                )}
                 <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="mobile" />
               </div>
               
@@ -183,7 +195,7 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                         action.onClick?.();
                         onLinkClick?.();
                       }}
-                      className="text-left text-2xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors"
+                      className="text-left text-xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors"
                       variants={{
                         hidden: { opacity: 0, x: -20 },
                         show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.1 * index } }
@@ -241,6 +253,17 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                       back →
                     </motion.button>
                   )}
+                  {currentView === 'account' && (
+                    <motion.div
+                      className="mb-6 text-2xl font-light text-neutral-600 leading-none text-right"
+                      variants={{
+                        hidden: { opacity: 0, x: 20 },
+                        show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.1 } }
+                      }}
+                    >
+                      Welcome, {user?.firstName}
+                    </motion.div>
+                  )}
                   <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="desktop" />
                 </div>
                 
@@ -248,8 +271,8 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                   <motion.div 
                     className="flex flex-col space-y-2 text-right pb-10"
                     variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      show: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.3 } }
+                      hidden: { opacity: 0, x: 20 },
+                      show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.3 } }
                     }}
                   >
                     {BOTTOM_ACTIONS.map((action, index) => (
@@ -259,7 +282,7 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                           action.onClick?.();
                           onLinkClick?.();
                         }}
-                        className="text-right text-2xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors"
+                        className="text-right text-xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors"
                         variants={{
                           hidden: { opacity: 0, x: 20 },
                           show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.1 * index } }
