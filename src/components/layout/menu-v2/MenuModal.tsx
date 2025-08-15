@@ -2,7 +2,7 @@
 'use client';
 
 import { useClerk, useUser } from '@clerk/nextjs';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import NavLinks from './NavLinks';
@@ -56,10 +56,11 @@ type MenuModalProps = {
   onLinkClick?: () => void;
 };
 
-type ViewType = 'main' | 'account';
+type ViewType = 'main' | 'account' | 'newsletter';
 
 export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
   const [currentView, setCurrentView] = useState<ViewType>('main');
+  const [emailOptIn, setEmailOptIn] = useState<boolean | null>(null);
   const { signOut } = useClerk();
   const { user } = useUser();
 
@@ -79,6 +80,20 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
       alert('Failed to delete account. Please try again.');
     }
   };
+
+  // Initialize email opt-in status
+  useEffect(() => {
+    if (isOpen && emailOptIn === null) {
+      (async () => {
+        const res = await fetch('/api/init-user', { method: 'POST', credentials: 'same-origin' });
+        if (res.ok) {
+          type InitUserResponse = { ok?: boolean; approved?: boolean; emailOptIn?: boolean };
+          const data: InitUserResponse = await res.json().catch(() => ({} as InitUserResponse));
+          if (typeof data.emailOptIn === 'boolean') setEmailOptIn(data.emailOptIn);
+        }
+      })();
+    }
+  }, [isOpen, emailOptIn]);
 
   // Main menu groups
   const SHOP_LINKS = [
@@ -106,7 +121,11 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
     { 
       heading: 'account', 
       links: [
-        { label: 'newsletter', href: '#' }
+        { 
+          label: 'newsletter', 
+          onClick: () => setCurrentView('newsletter'),
+          type: 'action' as const
+        }
       ]
     },
     { 
@@ -120,13 +139,23 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
     }
   ];
 
+  // Newsletter view groups 
+  const NEWSLETTER_GROUPS = [
+    { 
+      heading: 'account', 
+      links: [
+        { label: 'newsletter', type: 'text' as const }
+      ]
+    }
+  ];
+
   // Bottom actions for account view
   const BOTTOM_ACTIONS = [
     { label: 'delete account', onClick: handleDeleteAccount, type: 'action' as const },
     { label: 'sign out', onClick: () => signOut({ redirectUrl: '/sign-in' }), type: 'action' as const }
   ];
 
-  const currentGroups = currentView === 'account' ? ACCOUNT_GROUPS : MAIN_GROUPS;
+  const currentGroups = currentView === 'account' ? ACCOUNT_GROUPS : currentView === 'newsletter' ? NEWSLETTER_GROUPS : MAIN_GROUPS;
 
   // Reset view when modal closes
   React.useEffect(() => {
@@ -154,9 +183,9 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
               animate="show"
             >
               <div>
-                {currentView === 'account' && (
+                {(currentView === 'account' || currentView === 'newsletter') && (
                   <motion.button
-                    onClick={() => setCurrentView('main')}
+                    onClick={() => setCurrentView(currentView === 'newsletter' ? 'account' : 'main')}
                     className="mb-4 text-sm text-neutral-400 hover:text-neutral-600 font-light"
                     variants={{
                       hidden: { opacity: 0, x: -20 },
@@ -166,7 +195,7 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                     ← back
                   </motion.button>
                 )}
-                {currentView === 'account' && (
+                {(currentView === 'account' || currentView === 'newsletter') && (
                   <motion.div
                     className="mb-6 text-2xl font-light text-neutral-600 leading-none"
                     variants={{
@@ -178,6 +207,51 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                   </motion.div>
                 )}
                 <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="mobile" />
+                
+                {currentView === 'newsletter' && (
+                  <motion.div 
+                    className="mt-8 space-y-2"
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      show: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.2 } }
+                    }}
+                  >
+                    <motion.p 
+                      className="text-sm font-light text-neutral-500"
+                      variants={{
+                        hidden: { opacity: 0, x: -20 },
+                        show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.3 } }
+                      }}
+                    >
+                      {emailOptIn ? "you'll receive updates" : "you won't receive updates"}
+                    </motion.p>
+                    <motion.button
+                      disabled={emailOptIn === null}
+                      onClick={async () => {
+                        const nextValue = !emailOptIn;
+                        setEmailOptIn(nextValue);
+                        const res = await fetch('/api/email-opt-in', {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          credentials: 'same-origin',
+                          body: JSON.stringify({ value: nextValue }),
+                        });
+                        if (!res.ok) {
+                          // revert on failure
+                          setEmailOptIn(!nextValue);
+                          alert('Failed to update preference');
+                        }
+                      }}
+                      className="text-left text-2xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors disabled:opacity-50"
+                      variants={{
+                        hidden: { opacity: 0, x: -20 },
+                        show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.4 } }
+                      }}
+                    >
+                      {emailOptIn ? 'opt out' : 'opt in'}
+                    </motion.button>
+                  </motion.div>
+                )}
               </div>
               
               {currentView === 'account' && (
@@ -241,9 +315,9 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                 animate="show"
               >
                 <div>
-                  {currentView === 'account' && (
+                  {(currentView === 'account' || currentView === 'newsletter') && (
                     <motion.button
-                      onClick={() => setCurrentView('main')}
+                      onClick={() => setCurrentView(currentView === 'newsletter' ? 'account' : 'main')}
                       className="mb-4 text-sm text-neutral-400 hover:text-neutral-600 block ml-auto font-light"
                       variants={{
                         hidden: { opacity: 0, x: 20 },
@@ -253,7 +327,7 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                       back →
                     </motion.button>
                   )}
-                  {currentView === 'account' && (
+                  {(currentView === 'account' || currentView === 'newsletter') && (
                     <motion.div
                       className="mb-6 text-2xl font-light text-neutral-600 leading-none text-right"
                       variants={{
@@ -265,6 +339,51 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                     </motion.div>
                   )}
                   <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="desktop" />
+                  
+                  {currentView === 'newsletter' && (
+                    <motion.div 
+                      className="mt-8 space-y-4 text-right"
+                      variants={{
+                        hidden: { opacity: 0, y: 20 },
+                        show: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.2 } }
+                      }}
+                    >
+                      <motion.p 
+                        className="text-sm font-light text-neutral-500"
+                        variants={{
+                          hidden: { opacity: 0, x: 20 },
+                          show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.3 } }
+                        }}
+                      >
+                        {emailOptIn ? "you'll receive updates" : "you won't receive updates"}
+                      </motion.p>
+                      <motion.button
+                        disabled={emailOptIn === null}
+                        onClick={async () => {
+                          const nextValue = !emailOptIn;
+                          setEmailOptIn(nextValue);
+                          const res = await fetch('/api/email-opt-in', {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'same-origin',
+                            body: JSON.stringify({ value: nextValue }),
+                          });
+                          if (!res.ok) {
+                            // revert on failure
+                            setEmailOptIn(!nextValue);
+                            alert('Failed to update preference');
+                          }
+                        }}
+                        className="text-right text-2xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors disabled:opacity-50"
+                        variants={{
+                          hidden: { opacity: 0, x: 20 },
+                          show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.4 } }
+                        }}
+                      >
+                        {emailOptIn ? 'opt out' : 'opt in'}
+                      </motion.button>
+                    </motion.div>
+                  )}
                 </div>
                 
                 {currentView === 'account' && (
