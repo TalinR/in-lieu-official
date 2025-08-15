@@ -144,7 +144,11 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
     { 
       heading: 'account', 
       links: [
-        { label: 'newsletter', type: 'text' as const }
+        { 
+          label: 'newsletter', 
+          type: 'action' as const,
+          onClick: () => {} // Empty function to maintain action styling without functionality
+        }
       ]
     }
   ];
@@ -225,31 +229,61 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                     >
                       {emailOptIn ? "you'll receive updates" : "you won't receive updates"}
                     </motion.p>
-                    <motion.button
-                      disabled={emailOptIn === null}
-                      onClick={async () => {
-                        const nextValue = !emailOptIn;
-                        setEmailOptIn(nextValue);
-                        const res = await fetch('/api/email-opt-in', {
-                          method: 'PATCH',
-                          headers: { 'Content-Type': 'application/json' },
-                          credentials: 'same-origin',
-                          body: JSON.stringify({ value: nextValue }),
-                        });
-                        if (!res.ok) {
-                          // revert on failure
-                          setEmailOptIn(!nextValue);
-                          alert('Failed to update preference');
-                        }
-                      }}
-                      className="text-left text-2xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors disabled:opacity-50"
+                    <motion.div
+                      className="text-left text-2xl font-light leading-none"
                       variants={{
                         hidden: { opacity: 0, x: -20 },
                         show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.4 } }
                       }}
                     >
-                      {emailOptIn ? 'opt out' : 'opt in'}
-                    </motion.button>
+                      {!emailOptIn ? (
+                        <button
+                          disabled={emailOptIn === null}
+                          onClick={async () => {
+                            setEmailOptIn(true);
+                            const res = await fetch('/api/email-opt-in', {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              credentials: 'same-origin',
+                              body: JSON.stringify({ value: true }),
+                            });
+                            if (!res.ok) {
+                              setEmailOptIn(false);
+                              alert('Failed to update preference');
+                            }
+                          }}
+                          className="text-neutral-500 hover:text-neutral-700 transition-colors disabled:opacity-50"
+                        >
+                          opt-in
+                        </button>
+                      ) : (
+                        <span className="text-[#C9C9C9]">opt-in</span>
+                      )}
+                      <span className="text-[#C9C9C9]">/</span>
+                      {emailOptIn ? (
+                        <button
+                          disabled={emailOptIn === null}
+                          onClick={async () => {
+                            setEmailOptIn(false);
+                            const res = await fetch('/api/email-opt-in', {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              credentials: 'same-origin',
+                              body: JSON.stringify({ value: false }),
+                            });
+                            if (!res.ok) {
+                              setEmailOptIn(true);
+                              alert('Failed to update preference');
+                            }
+                          }}
+                          className="text-neutral-500 hover:text-neutral-700 transition-colors disabled:opacity-50"
+                        >
+                          opt-out
+                        </button>
+                      ) : (
+                        <span className="text-[#C9C9C9]">opt-out</span>
+                      )}
+                    </motion.div>
                   </motion.div>
                 )}
               </div>
@@ -342,7 +376,7 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                   
                   {currentView === 'newsletter' && (
                     <motion.div 
-                      className="mt-8 space-y-4 text-right"
+                      className="mt-8 space-y-2 text-right"
                       variants={{
                         hidden: { opacity: 0, y: 20 },
                         show: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.2 } }
@@ -357,31 +391,61 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                       >
                         {emailOptIn ? "you'll receive updates" : "you won't receive updates"}
                       </motion.p>
-                      <motion.button
-                        disabled={emailOptIn === null}
-                        onClick={async () => {
-                          const nextValue = !emailOptIn;
-                          setEmailOptIn(nextValue);
-                          const res = await fetch('/api/email-opt-in', {
-                            method: 'PATCH',
-                            headers: { 'Content-Type': 'application/json' },
-                            credentials: 'same-origin',
-                            body: JSON.stringify({ value: nextValue }),
-                          });
-                          if (!res.ok) {
-                            // revert on failure
-                            setEmailOptIn(!nextValue);
-                            alert('Failed to update preference');
-                          }
-                        }}
-                        className="text-right text-2xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors disabled:opacity-50"
+                      <motion.div
+                        className="text-right text-2xl font-light leading-none"
                         variants={{
                           hidden: { opacity: 0, x: 20 },
                           show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.4 } }
                         }}
                       >
-                        {emailOptIn ? 'opt out' : 'opt in'}
-                      </motion.button>
+                        {!emailOptIn ? (
+                          <button
+                            disabled={emailOptIn === null}
+                            onClick={async () => {
+                              setEmailOptIn(true);
+                              const res = await fetch('/api/email-opt-in', {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                credentials: 'same-origin',
+                                body: JSON.stringify({ value: true }),
+                              });
+                              if (!res.ok) {
+                                setEmailOptIn(false);
+                                alert('Failed to update preference');
+                              }
+                            }}
+                            className="text-neutral-500 hover:text-neutral-700 transition-colors disabled:opacity-50"
+                          >
+                            opt-in
+                          </button>
+                        ) : (
+                          <span className="text-[#C9C9C9]">opt-in</span>
+                        )}
+                        <span className="text-[#C9C9C9]">/</span>
+                        {emailOptIn ? (
+                          <button
+                            disabled={emailOptIn === null}
+                            onClick={async () => {
+                              setEmailOptIn(false);
+                              const res = await fetch('/api/email-opt-in', {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                credentials: 'same-origin',
+                                body: JSON.stringify({ value: false }),
+                              });
+                              if (!res.ok) {
+                                setEmailOptIn(true);
+                                alert('Failed to update preference');
+                              }
+                            }}
+                            className="text-neutral-500 hover:text-neutral-700 transition-colors disabled:opacity-50"
+                          >
+                            opt-out
+                          </button>
+                        ) : (
+                          <span className="text-[#C9C9C9]">opt-out</span>
+                        )}
+                      </motion.div>
                     </motion.div>
                   )}
                 </div>
