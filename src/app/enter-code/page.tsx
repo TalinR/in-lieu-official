@@ -2,17 +2,30 @@
 
 import { useClerk, useUser } from '@clerk/nextjs';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 export default function EnterCodePage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [emailOptIn, setEmailOptIn] = useState<boolean | null>(null);
   const { user } = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next') || '/';
+
+  useEffect(() => {
+    // Initialize user flags once per session; middleware controls page access.
+    (async () => {
+      const res = await fetch('/api/init-user', { method: 'POST', credentials: 'same-origin' });
+      if (res.ok) {
+        type InitUserResponse = { ok?: boolean; approved?: boolean; emailOptIn?: boolean };
+        const data: InitUserResponse = await res.json().catch(() => ({} as InitUserResponse));
+        if (typeof data.emailOptIn === 'boolean') setEmailOptIn(data.emailOptIn);
+      }
+    })();
+  }, []);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -35,17 +48,16 @@ export default function EnterCodePage() {
       return;
     }
 
-    // Force the session token to refresh so middleware sees updated claims immediately
-    await user?.reload(); // refreshes claims
+    // No need to refresh claims; middleware now reads persistent metadata
     router.push(next);
   }
 
   const { signOut } = useClerk();
 
   return (
-    <div className="min-h-screen relative">
+    <div className="fixed inset-0 overflow-hidden overscroll-none">
       {/* Mobile: Single Background Image */}
-      <div className="absolute right-0 bottom-0 h-6/8 w-3/4 lg:hidden">
+      <div className="absolute right-0 bottom-0 h-3/4 w-3/4 lg:hidden">
         <Image
           src="/images/test_image_2.png"
           alt="In Lieu — mobile background"
@@ -88,9 +100,9 @@ export default function EnterCodePage() {
       <div className="absolute inset-0 bg-white/30 backdrop-blur-xl z-65" />
       
       {/* Content */}
-      <div className="relative z-70 min-h-screen flex">
+      <div className="relative z-70 h-full flex overflow-hidden">
         {/* Mobile: top-left, Desktop: center */}
-        <div className="w-full max-w-md p-10 lg:mx-auto lg:p-0 lg:flex lg:items-center lg:justify-center lg:min-h-screen">
+        <div className="w-full max-w-md p-8 lg:mx-auto lg:p-0 lg:flex lg:items-center lg:justify-center lg:h-full">
           <div className="lg:text-center">
             <h1 className="text-l font-light mb-2">Welcome, {user?.firstName}</h1>
             <p className="text-l font-light mb-5">Please enter your presale code</p>
@@ -128,13 +140,38 @@ export default function EnterCodePage() {
         </div>
       </div>
       
-      {/* Sign Out Button */}
-      <button
-        onClick={() => signOut({ redirectUrl: '/sign-in' })}
-        className="absolute bottom-4 left-4 lg:bottom-4 lg:left-1/2 lg:-translate-x-1/2 z-75 w-[150px] py-3 ml-5 lg: ml-0 lg:mb-10 text-sm font-light border border-gray-300 rounded-lg text-center"
-      >
-        Sign out
-      </button>
+      {/* Preferences + Sign Out (mobile: bottom-left, desktop: centered) */}
+      <div className="absolute bottom-6 left-6 z-75 flex flex-col items-start text-left lg:left-1/2 lg:-translate-x-1/2 lg:items-center lg:text-center">
+        <p className="text-xs font-light pb-2 text-gray-700">Email notifications are {emailOptIn ? 'on' : 'off'}</p>
+        <button
+          disabled={emailOptIn === null}
+          onClick={async () => {
+            const nextValue = !emailOptIn;
+            setEmailOptIn(nextValue);
+            const res = await fetch('/api/email-opt-in', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify({ value: nextValue }),
+            });
+            if (!res.ok) {
+              // revert on failure
+              setEmailOptIn(!nextValue);
+              alert('Failed to update preference');
+            }
+          }}
+          className="w-[100px] py-2 lg:py-1 text-sm lg:text-xs font-light border border-gray-300 rounded-lg text-center mb-4 lg:mb-2 text-gray-700"
+        >
+          {emailOptIn ? 'Opt out' : 'Opt in'}
+        </button>
+        <p className="text-xs font-light pb-2 text-gray-700">Click to sign out</p>
+        <button
+          onClick={() => signOut({ redirectUrl: '/sign-in' })}
+          className="w-[100px] py-2 lg:py-1 text-sm lg:text-xs font-light border border-gray-300 rounded-lg text-center text-gray-700 lg:mb-20"
+        >
+          Sign out
+        </button>
+      </div>
     </div>
   );
 }

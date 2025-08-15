@@ -1,5 +1,5 @@
 // app/api/redeem-code/route.ts
-import { auth, createClerkClient } from '@clerk/nextjs/server';
+import { auth, clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 const validCodes = new Set(
@@ -19,11 +19,13 @@ export async function POST(req: Request) {
   }
 
   try {
-    const client = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+    const client = await clerkClient();
     
-    // Mark user as approved
+    // Mark user as approved (persistent, server-only). Merge to preserve existing keys.
+    const current = await client.users.getUser(userId);
+    const currentPrivate = (current.privateMetadata as Record<string, unknown> | undefined) ?? {};
     await client.users.updateUser(userId, {
-      publicMetadata: { approved: true },
+      privateMetadata: { ...currentPrivate, approved: true },
     });
 
     // (Optional) Also add their email to Clerk's allowlist for future sign-ups
