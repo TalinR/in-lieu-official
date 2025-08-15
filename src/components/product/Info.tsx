@@ -73,7 +73,7 @@ export default function Info({ product }: { product: Product }) {
                 alt={item.alt}
                 width={55}
                 height={55}
-                priority={false}
+                priority={true}
                 className="pb-2 w-12 lg:w-12"
               />
               <div className="text-md">{item.percent}%</div>

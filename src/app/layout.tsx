@@ -23,6 +23,11 @@ export default function RootLayout({
   return (
     <ClerkProvider>
     <html lang="en">
+      <head>
+        {/* Prefetch both product pages since there are only 2 */}
+        <link rel="prefetch" href="/products/avril" />
+        <link rel="prefetch" href="/products/lyon" />
+      </head>
       <body className="font-sans antialiased">
         <CartProvider cartPromise={cart}>
             <Navbar />

@@ -8,6 +8,8 @@ import Gallery from '@/components/product/Gallery';
 import Copy from '@/components/product/Copy';
 import PurchasePanel from '@/components/product/PurchasePanel';
 import Info from '@/components/product/Info';
+import ImagePreloader from '@/components/ImagePreloader';
+import ProductPagePrefetcher from '@/components/ProductPagePrefetcher';
 
 
 export async function generateMetadata(props: {
@@ -72,6 +74,8 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
 
   return (
     <ProductProvider>
+      <ImagePreloader />
+      <ProductPagePrefetcher />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

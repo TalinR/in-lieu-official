@@ -32,7 +32,7 @@ export default function MeasurementDiagram({ guide, unit, values }: Props) {
             fill
             sizes="(min-width: 768px) 512px, 100vw"
             className="object-contain select-none"
-            priority={false}
+            priority={true}
           />
         </div>
         {/* Labels */}
