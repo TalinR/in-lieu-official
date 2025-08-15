@@ -19,7 +19,12 @@ const linkVariants = {
   }
 };
 
-type LinkItem = { label: string; href: string };
+type LinkItem = { 
+  label: string; 
+  href?: string;
+  onClick?: () => void;
+  type?: 'link' | 'text' | 'action';
+};
 type Group = { heading?: string; links: LinkItem[] };
 
 type Props = {
@@ -39,30 +44,72 @@ export default function NavLinks({ groups, onNavigate, variant = 'mobile' }: Pro
         <motion.div key={i} className="flex flex-col" variants={linkVariants}>
           {g.heading && (
             <motion.span 
-              className="mb-2 text-xs lg:text-sm font-light tracking-wide text-neutral-600"
+              className="mb-1 text-xs lg:text-sm font-light tracking-wide text-neutral-600"
               variants={linkVariants}
             >
               {g.heading}
             </motion.span>
           )}
           <ul className={clsx('flex flex-col', gapY)}>
-            {g.links.map((l) => {
-              const isActive =
-                pathname === l.href || pathname.startsWith(l.href + '/');
+            {g.links.map((l, index) => {
+              const itemType = l.type || (l.href ? 'link' : l.onClick ? 'action' : 'text');
+              const key = l.href || l.label + index;
+              
+              // For regular links
+              if (itemType === 'link' && l.href) {
+                const isActive =
+                  pathname === l.href || pathname.startsWith(l.href + '/');
+                return (
+                  <motion.li key={key} variants={linkVariants}>
+                    <Link
+                      href={l.href}
+                      onClick={onNavigate}
+                      className={clsx(
+                        'leading-none transition-colors font-light',
+                        size,
+                        isActive ? 'text-rose-500' : 'text-neutral-600 hover:text-neutral-600'
+                      )}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {l.label}
+                    </Link>
+                  </motion.li>
+                );
+              }
+              
+              // For action buttons
+              if (itemType === 'action' && l.onClick) {
+                return (
+                  <motion.li key={key} variants={linkVariants}>
+                    <button
+                      onClick={() => {
+                        l.onClick?.();
+                        if (l.href) onNavigate?.();
+                      }}
+                      className={clsx(
+                        'leading-none transition-colors font-light text-left',
+                        size,
+                        'text-neutral-600 hover:text-neutral-600'
+                      )}
+                    >
+                      {l.label}
+                    </button>
+                  </motion.li>
+                );
+              }
+              
+              // For text-only items
               return (
-                <motion.li key={l.href} variants={linkVariants}>
-                  <Link
-                    href={l.href}
-                    onClick={onNavigate}
+                <motion.li key={key} variants={linkVariants}>
+                  <span
                     className={clsx(
-                      'leading-none transition-colors font-light',
+                      'leading-none font-light',
                       size,
-                      isActive ? 'text-rose-500' : 'text-neutral-600 hover:text-neutral-600'
+                      'text-neutral-400'
                     )}
-                    aria-current={isActive ? 'page' : undefined}
                   >
                     {l.label}
-                  </Link>
+                  </span>
                 </motion.li>
               );
             })}
