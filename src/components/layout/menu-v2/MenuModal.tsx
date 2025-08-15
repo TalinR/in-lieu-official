@@ -1,6 +1,7 @@
 // src/components/layout/menu-v2/MenuModal.tsx
 'use client';
 
+import { useClerk } from '@clerk/nextjs';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
@@ -59,6 +60,24 @@ type ViewType = 'main' | 'account';
 
 export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
   const [currentView, setCurrentView] = useState<ViewType>('main');
+  const { signOut } = useClerk();
+
+  const handleDeleteAccount = async () => {
+    const confirmed = window.confirm('This will permanently delete your account. This action cannot be undone. Continue?');
+    if (!confirmed) return;
+    try {
+      const res = await fetch('/api/delete-account', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        // Explicitly same-origin; prevents cookies from being sent to other origins
+        credentials: 'same-origin'
+      });
+      if (!res.ok) throw new Error('Request failed');
+      await signOut({ redirectUrl: '/sign-in' });
+    } catch {
+      alert('Failed to delete account. Please try again.');
+    }
+  };
 
   // Main menu groups
   const SHOP_LINKS = [
@@ -81,7 +100,7 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
     { heading: 'explore', links: EXPLORE_LINKS }
   ];
 
-  // Account view groups
+  // Account view groups (without bottom actions)
   const ACCOUNT_GROUPS = [
     { 
       heading: 'account', 
@@ -97,14 +116,13 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
         { label: 'try-on', type: 'text' as const },
         { label: 'perks', type: 'text' as const }
       ]
-    },
-    { 
-      heading: '', 
-      links: [
-        { label: 'delete account', onClick: () => console.log('delete account'), type: 'action' as const },
-        { label: 'sign out', onClick: () => console.log('sign out'), type: 'action' as const }
-      ]
     }
+  ];
+
+  // Bottom actions for account view
+  const BOTTOM_ACTIONS = [
+    { label: 'delete account', onClick: handleDeleteAccount, type: 'action' as const },
+    { label: 'sign out', onClick: () => signOut({ redirectUrl: '/sign-in' }), type: 'action' as const }
   ];
 
   const currentGroups = currentView === 'account' ? ACCOUNT_GROUPS : MAIN_GROUPS;
@@ -129,24 +147,53 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
             exit="exit"
           >
             <motion.div 
-              className="flex-none px-6 py-8"
+              className="flex-none px-6 py-8 flex flex-col justify-between h-full"
               variants={staggerContainer}
               initial="hidden"
               animate="show"
             >
+              <div>
+                {currentView === 'account' && (
+                  <motion.button
+                    onClick={() => setCurrentView('main')}
+                    className="mb-4 text-sm text-neutral-400 hover:text-neutral-600 font-light"
+                    variants={{
+                      hidden: { opacity: 0, x: -20 },
+                      show: { opacity: 1, x: 0, transition: { duration: 0.3 } }
+                    }}
+                  >
+                    ← back
+                  </motion.button>
+                )}
+                <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="mobile" />
+              </div>
+              
               {currentView === 'account' && (
-                <motion.button
-                  onClick={() => setCurrentView('main')}
-                  className="mb-4 text-sm text-neutral-400 hover:text-neutral-600 font-light"
+                <motion.div 
+                  className="flex flex-col space-y-2"
                   variants={{
-                    hidden: { opacity: 0, x: -20 },
-                    show: { opacity: 1, x: 0, transition: { duration: 0.3 } }
+                    hidden: { opacity: 0, y: 20 },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.3 } }
                   }}
                 >
-                  ← back
-                </motion.button>
+                  {BOTTOM_ACTIONS.map((action, index) => (
+                    <motion.button
+                      key={action.label}
+                      onClick={() => {
+                        action.onClick?.();
+                        onLinkClick?.();
+                      }}
+                      className="text-left text-2xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors"
+                      variants={{
+                        hidden: { opacity: 0, x: -20 },
+                        show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.1 * index } }
+                      }}
+                    >
+                      {action.label}
+                    </motion.button>
+                  ))}
+                </motion.div>
               )}
-              <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="mobile" />
             </motion.div>
             <motion.div 
               className="flex-1"
@@ -175,25 +222,54 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
           >
             <div className="relative z-10 pt-25 pr-10 flex h-full w-full items-start justify-end">
               <motion.div 
-                className="text-right"
+                className="text-right h-full flex flex-col justify-between"
                 onClick={(e) => e.stopPropagation()}
                 variants={staggerContainer}
                 initial="hidden"
                 animate="show"
               >
+                <div>
+                  {currentView === 'account' && (
+                    <motion.button
+                      onClick={() => setCurrentView('main')}
+                      className="mb-4 text-sm text-neutral-400 hover:text-neutral-600 block ml-auto font-light"
+                      variants={{
+                        hidden: { opacity: 0, x: 20 },
+                        show: { opacity: 1, x: 0, transition: { duration: 0.3 } }
+                      }}
+                    >
+                      back →
+                    </motion.button>
+                  )}
+                  <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="desktop" />
+                </div>
+                
                 {currentView === 'account' && (
-                  <motion.button
-                    onClick={() => setCurrentView('main')}
-                    className="mb-4 text-sm text-neutral-400 hover:text-neutral-600 block ml-auto font-light"
+                  <motion.div 
+                    className="flex flex-col space-y-2 text-right pb-10"
                     variants={{
-                      hidden: { opacity: 0, x: 20 },
-                      show: { opacity: 1, x: 0, transition: { duration: 0.3 } }
+                      hidden: { opacity: 0, y: 20 },
+                      show: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.3 } }
                     }}
                   >
-                    back →
-                  </motion.button>
+                    {BOTTOM_ACTIONS.map((action, index) => (
+                      <motion.button
+                        key={action.label}
+                        onClick={() => {
+                          action.onClick?.();
+                          onLinkClick?.();
+                        }}
+                        className="text-right text-2xl font-light text-neutral-600 hover:text-neutral-800 leading-none transition-colors"
+                        variants={{
+                          hidden: { opacity: 0, x: 20 },
+                          show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.1 * index } }
+                        }}
+                      >
+                        {action.label}
+                      </motion.button>
+                    ))}
+                  </motion.div>
                 )}
-                <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="desktop" />
               </motion.div>
             </div>
           </motion.div>

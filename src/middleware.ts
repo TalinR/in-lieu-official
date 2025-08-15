@@ -3,7 +3,7 @@ import { get } from '@vercel/edge-config';
 import { NextResponse } from 'next/server';
 
 const isPublic = createRouteMatcher([
-  '/sign-in(.*)', '/sign-up(.*)', '/sign-out(.*)', '/enter-code(.*)', '/api/redeem-code(.*)',
+  '/sign-in(.*)', '/sign-up(.*)', '/sign-out(.*)', '/enter-code(.*)', '/api/redeem-code(.*)', '/api/delete-account(.*)',
   '/_next/static/(.*)', '/_next/image/(.*)', '/favicon.ico', '/robots.txt',
 ]);
 
