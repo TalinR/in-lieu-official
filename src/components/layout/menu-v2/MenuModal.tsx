@@ -174,7 +174,7 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                       show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.1 } }
                     }}
                   >
-                    Welcome, {user?.firstName}
+                    Hey, {user?.firstName}
                   </motion.div>
                 )}
                 <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="mobile" />
@@ -261,7 +261,7 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                         show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.1 } }
                       }}
                     >
-                      Welcome, {user?.firstName}
+                      Hey, {user?.firstName}
                     </motion.div>
                   )}
                   <NavLinks groups={currentGroups} onNavigate={onLinkClick} variant="desktop" />
