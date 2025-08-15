@@ -91,7 +91,7 @@ export type ProductOption = {
 export type ProductVariant = {
   id: string;
   title: string;
-  availableForSale: boolean;
+  availableForSale?: boolean;
   selectedOptions: {
     name: string;
     value: string;
@@ -146,6 +146,7 @@ export type ShopifyProduct = {
   // NEW (optional)
   careInstructions?: Metafield;
   longDescription?: Metafield;
+  deliveryAndReturns?: Metafield;
   sizeChart?: Metafield;
   productCardPhoto?: Metafield;
   sizeChartValues?: Metafield;

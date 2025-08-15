@@ -9,6 +9,7 @@ import Copy from '@/components/product/Copy';
 import PurchasePanel from '@/components/product/PurchasePanel';
 import Info from '@/components/product/Info';
 
+
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
 }): Promise<Metadata> {

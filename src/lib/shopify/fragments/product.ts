@@ -66,6 +66,10 @@ const productFragment = /* GraphQL */ `
       type
       value
     }
+    deliveryAndReturns: metafield(namespace: "custom", key: "delivery_and_returns") {
+    type
+    value
+    }
     productCardPhoto: metafield(namespace: "custom", key: "product_card_photo") {
       type
       value

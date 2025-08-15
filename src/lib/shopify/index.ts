@@ -292,7 +292,29 @@ export async function getCart(): Promise<Cart | undefined> {
     return undefined;
   }
 
-  return reshapeCart(res.body.data.cart);
+  // Shape the cart for easier inspection
+  const shapedCart = reshapeCart(res.body.data.cart);
+
+  // If Shopify left any lines with quantity 0 (e.g. item went OOS during checkout),
+  // proactively remove them so the cart is clean on return.
+  const zeroQuantityLineIds = shapedCart.lines
+    .filter((line) => (line?.quantity ?? 0) <= 0 && !!line?.id)
+    .map((line) => line!.id!) as string[];
+
+  if (zeroQuantityLineIds.length > 0) {
+    try {
+      const cleanedCart = await removeFromCart(zeroQuantityLineIds);
+      return cleanedCart;
+    } catch {
+      // If cleanup fails, fall back to returning the shaped cart without blocking
+      return {
+        ...shapedCart,
+        lines: shapedCart.lines.filter((line) => (line?.quantity ?? 0) > 0)
+      };
+    }
+  }
+
+  return shapedCart;
 }
 
 export async function getCollection(

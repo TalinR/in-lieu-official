@@ -50,6 +50,7 @@ export default function Info({ product }: { product: Product }) {
       id: "find-your-size",
       title: "find your size",
       content: local?.sizeGuide ? (
+        
         <FindYourSize guide={guide} />
       ) : (
         <p className="text-sm text-neutral-600">—</p>
@@ -96,8 +97,14 @@ export default function Info({ product }: { product: Product }) {
     {
       id: "delivery-and-returns",
       title: "delivery and returns",
-      content: <p>Delivery & returns placeholder.</p>
+      content: product.deliveryAndReturns?.value ? (
+        <RichText value={product.deliveryAndReturns.value} />
+    ) : (
+      <p className="text-sm text-neutral-600">—</p>
+    )
     }
+
+
   ];
 
   const [sectionStates, setSectionStates] = useState<Map<string, { isOpen: boolean; shouldAnimate: boolean }>>(new Map());
@@ -204,7 +211,7 @@ export default function Info({ product }: { product: Product }) {
                   }}
                   className="overflow-hidden"
                 >
-                  <div className="pb-6 text-sm font-light text-neutral-700">
+                  <div className="pb-6 text-sm font-light text-neutral-700 px-2">
                     {s.content}
                   </div>
                 </motion.div>
