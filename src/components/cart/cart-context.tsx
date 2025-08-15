@@ -52,7 +52,7 @@ function updateCartItem(
 
   const newQuantity =
     updateType === 'plus' ? item.quantity + 1 : item.quantity - 1;
-  if (newQuantity === 0) return null;
+  if (newQuantity <= 0) return null;
 
   const singleItemAmount = Number(item.cost.totalAmount.amount) / item.quantity;
   const newTotalAmount = calculateItemCost(
