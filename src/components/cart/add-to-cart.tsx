@@ -40,6 +40,7 @@ function SubmitButton({
         <span className="lowercase font-light">out of stock</span>
         {PriceEl}
       </button>
+      
     );
   }
 

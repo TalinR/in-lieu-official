@@ -4,6 +4,7 @@ import React from "react";
 import type { Product } from "@/lib/shopify/types";
 import SizeSelector from "./SizeSelector";
 import { AddToCart } from "@/components/cart/add-to-cart";
+import WishlistButton from "./WishlistButton";
 
 const SIZE_GUIDE_SECTION_ID = 'find-your-size';
 
@@ -42,8 +43,13 @@ export default function PurchasePanel({ product }: { product: Product }) {
           <span className="font-light">size guide</span>
         </button>
       </div>
-      <div className="relative">
-        <AddToCart product={product} />
+      <div className="flex flex-col gap-2">
+        <div className="relative">
+          <AddToCart product={product} />
+        </div>
+        <div className="relative">
+          <WishlistButton product={product} />
+        </div>
       </div>
     </div>
   );
