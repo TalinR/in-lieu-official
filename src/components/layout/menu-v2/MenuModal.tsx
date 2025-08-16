@@ -103,7 +103,7 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
 
   const EXPLORE_LINKS = [
     { label: 'home', href: '/' },
-    { label: 'lookbook', href: '/about' },
+    { label: 'lookbook', href: '/lookbook' },
     { 
       label: 'account', 
       onClick: () => setCurrentView('account'),
