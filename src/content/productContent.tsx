@@ -52,8 +52,8 @@ export const PRODUCT_CONTENT_BY_HANDLE: Record<string, ProductLocalContent> = {
       },
       modelNotes: (
         <div className="space-y-1">
-          <p >Tatsuki is <strong>6&apos;0</strong> and wearing a <strong>M</strong></p>
-          <p>Mina is <strong>5&apos;6</strong> and wearing a <strong>S</strong></p>
+          <p >Tatsuki is <strong>5&apos;11</strong> and wearing a <strong>M</strong></p>
+          <p>Mina is <strong>5&apos;6</strong> and wearing a <strong>XS</strong></p>
         </div>
       )
     },
@@ -86,7 +86,7 @@ export const PRODUCT_CONTENT_BY_HANDLE: Record<string, ProductLocalContent> = {
       
       modelNotes: (
         <div className="space-y-1">
-          <p >Tatsuki is <strong>6&apos;0</strong> and wearing a <strong>M</strong></p>
+          <p >Tatsuki is <strong>5&apos;11</strong> and wearing a <strong>M</strong></p>
           <p>Mina is <strong>5&apos;6</strong> and wearing a <strong>XS</strong></p>
         </div>
       )
