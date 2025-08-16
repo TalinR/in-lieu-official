@@ -52,8 +52,8 @@ export const PRODUCT_CONTENT_BY_HANDLE: Record<string, ProductLocalContent> = {
       },
       modelNotes: (
         <div className="space-y-1">
-          <p >Tatsuki is <strong>6&apos;0</strong> and wearing a <strong>L</strong></p>
-          <p>Mina is <strong>5&apos;6</strong> and wearing a <strong>M</strong></p>
+          <p >Tatsuki is <strong>6&apos;0</strong> and wearing a <strong>M</strong></p>
+          <p>Mina is <strong>5&apos;6</strong> and wearing a <strong>S</strong></p>
         </div>
       )
     },
@@ -66,27 +66,28 @@ export const PRODUCT_CONTENT_BY_HANDLE: Record<string, ProductLocalContent> = {
   },
   "lyon": {
     sizeGuide: {
-      image: { src: "/images/size-charts/avril_size_chart.png", alt: "Avril size chart" },
+      image: { src: "/images/size-charts/lyon_size_chart.png", alt: "Avril size chart" },
       sizes: ["xs", "s", "m", "l", "xl"],
       measurements: [
-        { key: "shoulder", label: "Shoulder", position: { x: 50, y: 7 } },
-        { key: "sleeve", label: "Sleeve", position: { x: 13, y: 64 } },
-        { key: "chest", label: "Chest", position: { x: 50, y: 60 } },
-        { key: "body", label: "Body", position: { x: 84, y: 64 } },
-        { key: "hem", label: "Hem", position: { x: 50, y: 93} }
+        { key: "waist", label: "Waist", position: { x: 50, y: 9 } },
+        { key: "inseam", label: "Inseam", position: { x: 57, y: 55 } },
+        { key: "outseam", label: "Outseam", position: { x: 78, y: 50 } },
+        { key: "front_rise", label: "Front Rise", position: { x: 23, y: 28 } },
+        { key: "leg_opening", label: "Leg Opening", position: { x: 40, y: 88} }
       ],
       // Example placeholder values in centimeters; adjust per product
       values: {
-        xs: { shoulder: 47, sleeve: 50, chest: 51, body: 60, hem: 48 },
-        s:  { shoulder: 48.5, sleeve: 51, chest: 53, body: 62, hem: 49.5 },
-        m:  { shoulder: 50, sleeve: 52, chest: 55, body: 64, hem: 51 },
-        l:  { shoulder: 51.5, sleeve: 53, chest: 57, body: 66, hem: 52.5 },
-        xl: { shoulder: 53, sleeve: 54, chest: 59, body: 68, hem: 54 }
+        xs: { waist: 68, inseam: 69, outseam: 100, front_rise: 31.8, leg_opening: 29 },
+        s:  { waist: 74, inseam: 73.5, outseam: 105, front_rise: 33, leg_opening: 31 },
+        m:  { waist: 80, inseam: 74.5, outseam: 107, front_rise: 34, leg_opening: 32 },
+        l:  { waist: 84, inseam: 75.5, outseam: 109, front_rise: 34.5, leg_opening: 33 },
+        xl: { waist: 88, inseam: 76.5, outseam: 111, front_rise: 35.5, leg_opening: 34 }
       },
+      
       modelNotes: (
         <div className="space-y-1">
-          <p >Tatsuki is <strong>6&apos;0</strong> and wearing a <strong>L</strong></p>
-          <p>Mina is <strong>5&apos;6</strong> and wearing a <strong>M</strong></p>
+          <p >Tatsuki is <strong>6&apos;0</strong> and wearing a <strong>M</strong></p>
+          <p>Mina is <strong>5&apos;6</strong> and wearing a <strong>XS</strong></p>
         </div>
       )
     },

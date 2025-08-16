@@ -74,7 +74,7 @@ export default function AdditionalProductImages({ product }: AdditionalProductIm
               height={image.height}
               className="w-full h-auto rounded-lg"
               sizes="(max-width: 768px) 100vw, 50vw"
-              priority={index < 2} // Prioritize loading first two images
+              priority={true} // Prioritize loading first two images
             />
           </div>
         ))}

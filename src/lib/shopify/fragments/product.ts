@@ -86,19 +86,54 @@ const productFragment = /* GraphQL */ `
     }
     exploreTheRestImage: metafield(namespace: "custom", key: "explore_the_rest_image") {
     type
-    value
-          reference {                    # include this for file_reference image URLs
-      ... on MediaImage {
-        image {
-          url
-          altText
-          width
-          height
+      value
+            reference {                    # include this for file_reference image URLs
+        ... on MediaImage {
+          image {
+            url
+            altText
+            width
+            height
+          }
         }
       }
     }
+    sizeChartImage: metafield(namespace: "custom", key: "size_chart_image") {
+    type
+      value
+            reference {                    # include this for file_reference image URLs
+        ... on MediaImage {
+          image {
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
     }
     productAdditionalPhotosAtBottom: metafield(namespace: "custom", key: "product_additional_photos_at_bottom") {
+      type
+      value
+      references(first: 50) {
+        edges {
+          node {
+            ... on MediaImage {
+              image {
+                url
+                altText
+                width
+                height
+              }
+            }
+            ... on GenericFile {
+              url
+            }
+          }
+        }
+      }
+    }
+    lookBookPhotosUseAvril: metafield(namespace: "custom", key: "lookbook_photos_use_avril") {
       type
       value
       references(first: 50) {
