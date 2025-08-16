@@ -34,6 +34,8 @@ export default async function HomePage() {
       <HeroImage 
         src="/images/home/hero_image.png" 
         alt="Makkuro Collection Hero"
+        width={3868}
+        height={3856}
       />
       {/* <p className="px-4 pb-12 lg:pb-16 w-full max-w-2xl mx-auto text-md font-light text-black leading-relaxed tracking-[-0.02em] text-center">
       the makkuro collection is like the calm within a world that moves way too fast. Welcome and enjoy it.
