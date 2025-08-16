@@ -4,6 +4,25 @@ import { getProduct } from '@/lib/shopify';
 import type { Product } from '@/lib/shopify/types';
 import { RichText } from "@/lib/shopify/richtext";
 
+// Type guard for image reference
+function hasImageReference(reference: unknown): reference is { image: { url: string; altText?: string; width: number; height: number } } {
+  if (typeof reference !== 'object' || reference === null) {
+    return false;
+  }
+  
+  const obj = reference as Record<string, unknown>;
+  if (!('image' in obj) || typeof obj.image !== 'object' || obj.image === null) {
+    return false;
+  }
+  
+  const image = obj.image as Record<string, unknown>;
+  return (
+    typeof image.url === 'string' &&
+    typeof image.width === 'number' &&
+    typeof image.height === 'number'
+  );
+}
+
 interface ExploreRestOfCollectionProps {
   product: Product;
 }
@@ -45,18 +64,24 @@ export default async function ExploreRestOfCollection({ product }: ExploreRestOf
         <div className="w-1/2 flex justify-end pr-2">
           <div className="w-4/5 lg:w-3/5">
             <Link href={`/products/${complementaryProduct.handle}`}>
-              {complementaryProduct.exploreTheRestImage?.reference && 
-               'image' in complementaryProduct.exploreTheRestImage.reference &&
-               complementaryProduct.exploreTheRestImage.reference.image ? (
-                <Image
-                  src={complementaryProduct.exploreTheRestImage.reference.image.url}
-                  alt={complementaryProduct.exploreTheRestImage.reference.image.altText || complementaryProduct.title}
-                  width={complementaryProduct.exploreTheRestImage.reference.image.width}
-                  height={complementaryProduct.exploreTheRestImage.reference.image.height}
-                  className="w-full h-auto"
-                  sizes="(max-width: 768px) 40vw, 20vw"
-                />
-              ) : null}
+              {(() => {
+                const imageRef = complementaryProduct.exploreTheRestImage?.reference;
+                
+                if (hasImageReference(imageRef)) {
+                  return (
+                    <Image
+                      src={imageRef.image.url}
+                      alt={imageRef.image.altText || complementaryProduct.title}
+                      width={imageRef.image.width}
+                      height={imageRef.image.height}
+                      className="w-full h-auto"
+                      priority={true}
+                    />
+                  );
+                }
+                
+                return null;
+              })()}
             </Link>
           </div>
         </div>
@@ -70,9 +95,11 @@ export default async function ExploreRestOfCollection({ product }: ExploreRestOf
             <p className="text-xs lg:text-lg font-light text-neutral-700 mb-1 lg:mb-2 leading-relaxed">
               {complementaryProduct.description}
             </p>
-            <div className="hidden lg:block text-sm font-light text-neutral-700 mb-3 pr-12">
-            <RichText value={complementaryProduct.longDescription.value} />
-            </div>
+            {complementaryProduct.longDescription?.value && (
+              <div className="hidden lg:block text-sm font-light text-neutral-700 mb-3 pr-12">
+                <RichText value={complementaryProduct.longDescription.value} />
+              </div>
+            )}
             <span className="text-xs lg:text-lg font-light text-neutral-500 group-hover:opacity-70 transition-opacity">
               explore
             </span>
