@@ -84,6 +84,41 @@ const productFragment = /* GraphQL */ `
         }
       }
     }
+    exploreTheRestImage: metafield(namespace: "custom", key: "explore_the_rest_image") {
+    type
+    value
+          reference {                    # include this for file_reference image URLs
+      ... on MediaImage {
+        image {
+          url
+          altText
+          width
+          height
+        }
+      }
+    }
+    }
+    productAdditionalPhotosAtBottom: metafield(namespace: "custom", key: "product_additional_photos_at_bottom") {
+      type
+      value
+      references(first: 50) {
+        edges {
+          node {
+            ... on MediaImage {
+              image {
+                url
+                altText
+                width
+                height
+              }
+            }
+            ... on GenericFile {
+              url
+            }
+          }
+        }
+      }
+    }
     sizeChart: metafield(namespace: "custom", key: "size_chart") {
       type
       value

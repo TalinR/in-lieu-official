@@ -86,8 +86,8 @@ export default function Info({ product }: { product: Product }) {
       )
     },
     {
-      id: "care-instructions",
-      title: "care instructions",
+      id: "product-details",
+      title: "product details",
       content: product.careInstructions?.value ? (
         <RichText value={product.careInstructions.value} />
     ) : (
@@ -152,7 +152,7 @@ export default function Info({ product }: { product: Product }) {
   }, []);
 
   return (
-    <section className="mx-auto max-w-5xl px-4 py-10">
+    <section className="mx-auto max-w-5xl px-4 pt-5 lg:pt-7">
       <ul className="divide-y divide-neutral-200">
         {sections.map((s) => (
           <li key={s.id} id={s.id}>

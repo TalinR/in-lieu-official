@@ -22,6 +22,9 @@ export default async function HomePage() {
   const avrilImg = getCardImage(avril);
   const lyonImg = getCardImage(lyon);
 
+  // console.log('Avril image dimensions:', avrilImg ? `${avrilImg.width}x${avrilImg.height}` : 'No image');
+  // console.log('Lyon image dimensions:', lyonImg ? `${lyonImg.width}x${lyonImg.height}` : 'No image');
+
   return (
     <main className="flex min-h-screen flex-col">
       <HeaderSection />

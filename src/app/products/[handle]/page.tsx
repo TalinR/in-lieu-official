@@ -8,6 +8,8 @@ import Gallery from '@/components/product/Gallery';
 import Copy from '@/components/product/Copy';
 import PurchasePanel from '@/components/product/PurchasePanel';
 import Info from '@/components/product/Info';
+import AdditionalProductImages from '@/components/product/AdditionalProductImages';
+import ExploreRestOfCollection from '@/components/product/ExploreRestOfCollection';
 import ImagePreloader from '@/components/ImagePreloader';
 import ProductPagePrefetcher from '@/components/ProductPagePrefetcher';
 
@@ -82,12 +84,16 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
           __html: JSON.stringify(productJsonLd)
         }}
       />
+      <div className="pb-10 lg:pb-0">
       <Hero
         copy={<Copy product={product} />}
         gallery={<Gallery product={product} />}
         purchasePanel={<PurchasePanel product={product} />}
       />
       <Info product={product} />
+      <AdditionalProductImages product={product} />
+      <ExploreRestOfCollection product={product} />
+      </div>
     </ProductProvider>
   );
 }

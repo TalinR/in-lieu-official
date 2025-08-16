@@ -25,6 +25,7 @@ export type Metafield = {
   type: string;
   value: string | null;
   reference?: unknown;
+  references?: Connection<unknown>;
 };
 
 
@@ -150,6 +151,8 @@ export type ShopifyProduct = {
   sizeChart?: Metafield;
   productCardPhoto?: Metafield;
   sizeChartValues?: Metafield;
+  productAdditionalPhotosAtBottom?: Metafield;
+  exploreTheRestImage?: Metafield;
 };
 
 export type ShopifyCartOperation = {

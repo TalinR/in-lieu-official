@@ -14,7 +14,7 @@ export default function ProductCard({
 }) {
   return (
     <Link href={href} className="block">
-      <div className="relative aspect-square w-full overflow-hidden bg-neutral-100 rounded-3xl">
+      <div className="relative aspect-square w-full overflow-hidden bg-[#EDEDED] rounded-3xl">
         <div className="absolute left-0 top-0 pl-6 pt-5 z-10 text-xl font-light text-black">
           {title}
         </div>
