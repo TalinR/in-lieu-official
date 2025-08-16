@@ -253,12 +253,12 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                               alert('Failed to update preference');
                             }
                           }}
-                          className="text-neutral-500 hover:text-neutral-700 transition-colors disabled:opacity-50"
+                          className="text-[#C9C9C9] hover:text-neutral-400 transition-colors disabled:opacity-50"
                         >
                           opt-in
                         </button>
                       ) : (
-                        <span className="text-[#C9C9C9]">opt-in</span>
+                        <span className="text-neutral-500">opt-in</span>
                       )}
                       <span className="text-[#C9C9C9]">/</span>
                       {emailOptIn ? (
@@ -277,12 +277,12 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                               alert('Failed to update preference');
                             }
                           }}
-                          className="text-neutral-500 hover:text-neutral-700 transition-colors disabled:opacity-50"
+                          className="text-[#C9C9C9] hover:text-neutral-400 transition-colors disabled:opacity-50"
                         >
                           opt-out
                         </button>
                       ) : (
-                        <span className="text-[#C9C9C9]">opt-out</span>
+                        <span className="text-neutral-500">opt-out</span>
                       )}
                     </motion.div>
                   </motion.div>
@@ -415,12 +415,12 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                                 alert('Failed to update preference');
                               }
                             }}
-                            className="text-neutral-500 hover:text-neutral-700 transition-colors disabled:opacity-50"
+                            className="text-[#C9C9C9] hover:text-neutral-400 transition-colors disabled:opacity-50"
                           >
                             opt-in
                           </button>
                         ) : (
-                          <span className="text-[#C9C9C9]">opt-in</span>
+                          <span className="text-neutral-500">opt-in</span>
                         )}
                         <span className="text-[#C9C9C9]">/</span>
                         {emailOptIn ? (
@@ -439,12 +439,12 @@ export default function MenuModal({ isOpen, onLinkClick }: MenuModalProps) {
                                 alert('Failed to update preference');
                               }
                             }}
-                            className="text-neutral-500 hover:text-neutral-700 transition-colors disabled:opacity-50"
+                            className="text-[#C9C9C9] hover:text-neutral-400 transition-colors disabled:opacity-50"
                           >
                             opt-out
                           </button>
                         ) : (
-                          <span className="text-[#C9C9C9]">opt-out</span>
+                          <span className="text-neutral-500">opt-out</span>
                         )}
                       </motion.div>
                     </motion.div>
