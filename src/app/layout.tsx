@@ -6,6 +6,7 @@ import { getCart } from '@/lib/shopify';
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: 'In Lieu Official',
@@ -33,6 +34,7 @@ export default function RootLayout({
             <Navbar />
             {children}
         </CartProvider>
+        <Analytics />
       </body>
     </html>
     </ClerkProvider>
